@@ -7,10 +7,14 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "antd": "^4.16.13",
+    "axios": "^0.24.0",
+    "gojs": "^2.1.53",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },
   "devDependencies": {
+    "@types/node": "^16.11.7",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@vitejs/plugin-react": "^1.0.0",

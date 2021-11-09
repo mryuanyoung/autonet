@@ -1,44 +1,32 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { useState } from 'react';
+import { Layout } from 'antd';
+import { AppContext } from '@hooks/AppContext';
+import Canvas from '@components/Canvas';
+import AttrubutionBox from '@components/AttributionBox';
+import CommandLine from '@components/CommandLine';
+import 'antd/dist/antd.css';
+
+const { Sider, Content } = Layout;
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [state, setState] = useState(-1);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <AppContext.Provider value={{ deviceId: state, setDeviceId: setState }}>
+      <Layout style={{ height: '100vh' }}>
+        <Sider width={200} collapsible collapsedWidth={0} zeroWidthTriggerStyle={{ top: 0 }} >左侧边栏</Sider>
+        <Layout >
+          <Layout style={{ display: 'flex', flexDirection: 'row', height: '30vh' }}>
+            <Content style={{ width: '30vw' }}><Canvas /></Content>
+            <Content><AttrubutionBox /></Content>
+          </Layout>
+          <Layout>
+            <Content><CommandLine /></Content>
+          </Layout>
+        </Layout>
+      </Layout>
+    </AppContext.Provider>
   )
 }
 
