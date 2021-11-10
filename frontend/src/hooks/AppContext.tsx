@@ -1,8 +1,17 @@
 import { createContext, useContext, Dispatch, SetStateAction } from 'react';
 
-export const AppContext = createContext({
+export interface Context {
+  deviceId: number,
+  fresh: boolean,
+  setDeviceId: (deviceId: number) => void,
+  setFresh: () => void,
+}
+
+export const AppContext = createContext<Context>({
   deviceId: -1,
-  setDeviceId: function () { } as Dispatch<SetStateAction<number>>
+  fresh: false,
+  setDeviceId: function () { },
+  setFresh: function () { }
 });
 
 export function useAppContext() {
