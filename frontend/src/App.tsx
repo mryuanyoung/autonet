@@ -12,8 +12,9 @@ const { Sider, Content } = Layout;
 
 function App() {
 
-  const [state, setState] = useState<Pick<Context, 'deviceId' | 'fresh'>>({
+  const [state, setState] = useState<Pick<Context, 'deviceId' | 'fresh' | 'topologyId'>>({
     deviceId: -1,
+    topologyId: -1,
     fresh: false
   });
 
@@ -40,8 +41,10 @@ function App() {
     <AppContext.Provider
       value={{
         deviceId: state.deviceId,
+        topologyId: state.topologyId,
         fresh: state.fresh,
         setDeviceId: (deviceId) => setState(obj => ({ ...obj, deviceId })),
+        setTopologyId: (topologyId) => setState(obj => ({ ...obj, topologyId })),
         setFresh: () => setState(o => ({...o, fresh: !o.fresh}))
       }}
     >
