@@ -10,8 +10,10 @@
     "antd": "^4.16.13",
     "axios": "^0.24.0",
     "gojs": "^2.1.53",
+    "gojs-react": "^1.1.0",
     "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react-dom": "^17.0.0",
+    "react-gojs": "^4.9.0"
   },
   "devDependencies": {
     "@types/node": "^16.11.7",
