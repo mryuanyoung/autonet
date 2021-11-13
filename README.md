@@ -4,7 +4,7 @@
 
 ## 后端
 
-fastapi：[文档](fastapi.tiangolo.com/zh)
+fastapi：[文档](https://fastapi.tiangolo.com/zh/)
 
 ## 前端
 
