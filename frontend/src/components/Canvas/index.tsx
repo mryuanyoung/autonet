@@ -3,7 +3,7 @@ import { getToplogyInfo } from '@api/canvas';
 import * as go from 'gojs';
 import { ReactDiagram } from 'gojs-react';
 import './Canvas.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import * as React from "react";
 import Router from './Router.png'
 
@@ -60,6 +60,21 @@ function initDiagram() {
           )  // end Adornment
       }
     );
+  diagram.linkTemplate =
+    $(go.Link,
+      { curve: go.Link.Bezier },// the whole link panel
+      $(go.Shape) , // the link shape, default black stroke
+      $(go.Panel, "from",
+        { segmentIndex: 0, segmentOffset: new go.Point(NaN, NaN),
+          segmentOrientation: go.Link.OrientUpright },
+        $(go.TextBlock, { margin: 3 },
+          new go.Binding("text", "from_port"))),
+      $(go.Panel, "to",
+        { segmentIndex: -1, segmentOffset: new go.Point(NaN, NaN),
+          segmentOrientation: go.Link.OrientUpright },
+        $(go.TextBlock, { margin: 3 },
+          new go.Binding("text", "to_port")))
+    );
   // also define a context menu for the diagram's background
   diagram.contextMenu =
     $("ContextMenu",
@@ -83,80 +98,156 @@ function handleModelChange(changes: any) {
 }
 function Canvas() {
   const { deviceId,setDeviceId } = useAppContext();
-  const [nodes,setNodes]=useState({
-    "id": 123,
-    "name": "routerA",
-    "source":Router
-  });
-  const [links,setLinks]=useState([]);
+  const [data,setdata]=useState({nodes:[],links:[]});
   const [loading, setLoading] = useState(false);
 
-  const getDeviceInfo = async () => {
-    if (!deviceId) return;
 
-    try {
-      setLoading(true);
 
-      // const res = await getToplogyInfo(deviceId);
-      // todo 接入后端
-      const res={
-        "code": 0,
-        "message": "success",
-        "data": {
-          "id": 2323,
-          "name": "toplogy1",
-          //true表示该文件是正在生效的拓扑文件
-          "isActive": true,
-          //路由器数量
-          "routerCount": 3,
-          //路由器列表
-          "routers":[
-            {
-              "id": 123,
-              "name": "routerA",
-              "ip": "172.16.0.1",
-              //子网掩码
-              "mask": "255.255.0.0",
-              //端口数量
-              "portCount": 4,
-              //密码
-              "password": 123456,
-              "ports":[
-                {
+  useEffect(()=>{
+    const getDeviceInfo = async () => {
+      if (!deviceId) return;
+
+      try {
+        setLoading(true);
+
+        // const res = await getToplogyInfo(deviceId);
+        // todo 接入后端
+        const res={
+          "code": 0,
+          "message": "success",
+          "data": {
+            "id": 2323,
+            "name": "toplogy1",
+            //true表示该文件是正在生效的拓扑文件
+            "isActive": true,
+            //路由器数量
+            "routerCount": 3,
+            //路由器列表
+            "routers":[
+              {
+                "id": 123,
+                "name": "router1",
+                "ip": "172.16.0.1",
+                //子网掩码
+                "mask": "255.255.0.0",
+                //端口数量
+                "portCount": 4,
+                //密码
+                "password": 123456,
+                "ports":[
+                  {
+                    "id": 123,
+                    "name": "s0/0/0",
+                    "isUp": true
+                  }
+                ]
+              },
+              {
+                "id": 124,
+                "name": "routerB",
+                "ip": "172.16.0.1",
+                //子网掩码
+                "mask": "255.255.0.0",
+                //端口数量
+                "portCount": 4,
+                //密码
+                "password": 123456,
+                "ports":[
+                  {
+                    "id": 124,
+                    "name": "s0/0/0",
+                    "isUp": true
+                  },
+                  {
+                    "id": 125,
+                    "name": "s0/1/0",
+                    "isUp": true
+                  }
+                ]
+              },
+              {
+                "id": 125,
+                "name": "routerC",
+                "ip": "172.16.0.1",
+                //子网掩码
+                "mask": "255.255.0.0",
+                //端口数量
+                "portCount": 4,
+                //密码
+                "password": 123456,
+                "ports":[
+                  {
+                    "id": 126,
+                    "name": "s0/0/0",
+                    "isUp": true
+                  }
+                ]
+              }
+            ],
+            //网线数量
+            cabelCount: 6,
+            //网线列表
+            "cabels":[
+              {
+                "id": 1,
+                "Router1Id":123,
+                "port1":{
                   "id": 123,
                   "name": "s0/0/0",
                   "isUp": true
+                },
+                "Router2Id":124,
+                "port2":{
+                  "id": 124,
+                  "name": "s0/0/0",
+                  "isUp": true
                 }
-              ]
-            }
-          ],
-          //网线数量
-          cabelCount: 6,
-          //网线列表
-          "cabels":[
-            {
-              "id": 123,
-              "port1Id":123,
-              "port2Id":234
-            }
-          ]
-        }
-      };
-      const routers=res.data.routers;
-      const nodes=routers.map((value)=>{
-        return {
-          "id": value.id,
-          "name": value.name,
-          "source":Router
-        }
-      });
-      console.log(nodes);
-      setLoading(false);
-    }
-    catch (err) {
-      console.log(err);
-    }
-  };
+              },
+              {
+                "id": 2,
+                "Router1Id":124,
+                "port1":{
+                  "id": 125,
+                  "name": "s0/1/0",
+                  "isUp": true
+                },
+                "Router2Id":125,
+                "port2":{
+                  "id": 126,
+                  "name": "s0/0/0",
+                  "isUp": true
+                }
+              }
+            ]
+          }
+        };
+        const nodes=res.data.routers.map((value)=>{
+          return {
+            "key": value.id,
+            "name": value.name,
+            "source":Router
+          }
+        });
+        const links=res.data.cabels.map((value)=>{
+          return {
+            "id":value.id,
+            "from":value.Router1Id,
+            "to":value.Router2Id,
+            "from_port":value.port1.name,
+            "to_port":value.port2.name
+          }
+        });
+        console.log(nodes,links);
+        // @ts-ignore
+        setdata({"nodes":nodes,links:links});
+        setLoading(false);
+      }
+      catch (err) {
+        console.log(err);
+      }
+    };
+    getDeviceInfo()
+  },[]);
 
   return (
     <div style={{paddingTop:'30px'}}>
@@ -164,15 +255,8 @@ function Canvas() {
       <ReactDiagram
         initDiagram={initDiagram}
         divClassName='diagram-component'
-        nodeDataArray={[
-          { key: "1" ,name: "Router1",   source: Router},
-          { key: "2" ,name: "Router2",   source: Router},
-          { key: "3" ,name: "Router3",   source: Router}
-        ]}
-        linkDataArray={[
-          { from: "1", to: "2" },
-          { from: "2", to: "3" }
-        ]}
+        nodeDataArray={data.nodes}
+        linkDataArray={data.links}
         onModelChange={handleModelChange}
       />
       ...
