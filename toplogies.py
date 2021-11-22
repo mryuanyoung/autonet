@@ -1,6 +1,7 @@
 from lib.toplogy import Toplogy
 from models.toplogyMaps import topIDMap, routerIDMap
 from models.defineConst import SUCCESS_INFO, FAILURE_INFO
+from tools.functions import getObejectFromMap
 import json
 
 class Toplogies:
@@ -25,12 +26,20 @@ class Toplogies:
 
     #查看拓扑信息
     def getToplogy(self, topId):
-        topId = int(topId)
-        if topId not in topIDMap.keys():
+        toplogy = getObejectFromMap(topId, topIDMap)
+        if not toplogy:
             return FAILURE_INFO
-        toplogy = topIDMap[topId]
         SUCCESS_INFO['data'] = toplogy.toJson()
         return SUCCESS_INFO
+
+    #查看拓扑文件信息
+    def getToplogyFile(self, topId):
+        toplogy = getObejectFromMap(topId, topIDMap)
+        if not toplogy:
+            return FAILURE_INFO
+        SUCCESS_INFO['data'] = toplogy.toJsonFile()
+        return SUCCESS_INFO
+
 
     #查看路由器信息
     def getRouter(self, routerId):

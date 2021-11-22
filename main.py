@@ -25,6 +25,11 @@ async def getToplogies():
 async def getToplogy(id):
     return toplogies.getToplogy(id)
 
+#查看拓扑文件
+@app.get("/toplogy/{id}/file")
+async def getToplogyFile(id):
+    return toplogies.getToplogyFile(id)
+
 #查看路由器配置
 @app.get("/toplogy/{id}/router/{routerId}")
 async def getRouter(id, routerId):

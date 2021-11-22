@@ -10,4 +10,3 @@ SUCCESS_MESSAGE = "success"
 SUCCESS_INFO = {"code": 0, "message": SUCCESS_MESSAGE}
 FAILURE_MESSAGE = "failure"
 FAILURE_INFO = {"code": -1, "message": FAILURE_MESSAGE}
-

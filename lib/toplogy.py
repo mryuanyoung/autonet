@@ -54,10 +54,13 @@ class Toplogy:
                 "cabelCount": len(self.__cabels),
                 "cabels": list(map(lambda  x: x.toSimpleJson(), self.__cabels))}
 
+    def toJsonFile(self):
+        return self.__conf
+
     #激活拓扑图
     def activate(self):
         self.__isActivate = True
 
     #失效拓扑图
     def deActivate(self):
-        self.__isActivate = True
+        self.__isActivate = False
