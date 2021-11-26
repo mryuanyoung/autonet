@@ -1,6 +1,6 @@
 import telnetlib
 import time
-
+from models.defineConst import SWITCH_PASSWORD, SWITCH_TELNET_PASSWORD, SWITCH_IP, ENABLE_ROOT
 
 class TelnetClient:
     def __init__(self):
@@ -13,13 +13,15 @@ class TelnetClient:
         time.sleep(sleep_seconds)
         return self.tn.read_very_eager().decode('ascii')
 
-    def login(self, host_ip, username, password):
+    def login_router(self, host_ip, password):
+        telnetClient.exec_cmd("telnet " + host_ip)
+        telnetClient.enable(password)
+
+    def login(self, host_ip, password):
         try:
             self.tn.open(host_ip)
         except:
             print('连接失败')
-        self.tn.read_until(b'login: ')
-        self.input(username)
         self.tn.read_until(b'Password: ')
         self.input(password)
         login_result = self.get_output()
@@ -33,6 +35,17 @@ class TelnetClient:
     def logout(self):
         self.input('exit')
 
+    def enable(self, password):
+        self.exec_cmd(ENABLE_ROOT)
+        self.exec_cmd(password)
+
+    def conf(self):
+        self.exec_cmd("conf terminal")
+
+    def end(self):
+        self.exec_cmd("end")
+
+
     def exec_cmd(self, cmd):
         self.input(cmd)
         res = self.get_output()
@@ -41,10 +54,11 @@ class TelnetClient:
         print("===================")
         return res
 
+telnetClient = TelnetClient()
+telnetClient.login(SWITCH_IP, SWITCH_TELNET_PASSWORD)
+telnetClient.enable(SWITCH_PASSWORD)
 
-if __name__ == '__main__':
-    tc = TelnetClient()
-    tc.login('172.19.241.224', 'root', 'Nju123456')
-    tc.exec_cmd('ifconfig')
-    tc.exec_cmd('ll -a')
-    tc.logout()
+    # tc.logout()
+if __name__ == "__main__":
+
+    telnetClient.exec_cmd("sh ip route")
