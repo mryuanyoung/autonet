@@ -5,6 +5,8 @@ from lib.port import Port
 from models.toplogyMaps import portIDMap
 from tools.telnetClient import telnetClient
 from time import sleep
+
+
 class Router:
 
     def __init__(self, **kwargs):

@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+import json
+from fastapi import FastAPI, UploadFile, File
 from enum import Enum
 from toplogies import toplogies
+from lib.toplogy import Toplogy
 
 app = FastAPI()
 
@@ -15,25 +17,29 @@ async def get_item(item_id):
     return {'item_id': item_id}
 
 
-#获取拓扑列表
+# 获取拓扑列表
 @app.get("/toplogies")
 async def getToplogies():
     return toplogies.toJson()
 
-#查看拓扑
+
+# 查看拓扑
 @app.get("/toplogy/{id}")
 async def getToplogy(id):
     return toplogies.getToplogy(id)
 
-#查看拓扑文件
+
+# 查看拓扑文件
 @app.get("/toplogy/{id}/file")
 async def getToplogyFile(id):
     return toplogies.getToplogyFile(id)
 
-#查看路由器配置
+
+# 查看路由器配置
 @app.get("/toplogy/{id}/router/{routerId}")
 async def getRouter(id, routerId):
     return toplogies.getRouter(routerId)
+
 
 class ModelName(str, Enum):
     alexnet = "alexnet"
@@ -55,6 +61,20 @@ async def get_model(model_name: ModelName):
 @app.get("/files/{file_path:path}")
 async def read_file(file_path: str):
     return {"file_path": file_path}
+
+
+# 通过上传配置文件，进行配置
+@app.post("/toplogy/upload")
+async def file_upload(my_file: UploadFile = File(...)):
+    temp_file = await my_file.read()
+    file_to_str = str(temp_file, 'utf-8')
+    new_topology = Toplogy(conf=json.loads(file_to_str))
+    print(new_topology)
+    toplogies.addToplogy(new_topology)
+
+
+
+
 
 
 fake_db = [1, 23, 456]
