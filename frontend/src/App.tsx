@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Layout, Menu } from 'antd';
 import { AppContext, Context } from '@hooks/AppContext';
 import Canvas from '@components/Canvas';
@@ -7,6 +7,7 @@ import CommandLine from '@components/CommandLine';
 import 'antd/dist/antd.css';
 import {Simulate} from "react-dom/test-utils";
 import select = Simulate.select;
+import Router from "./components/Canvas/Router.png";
 
 const { Sider, Content } = Layout;
 
@@ -17,23 +18,29 @@ function App() {
     topologyId: -1,
     fresh: false
   });
-
-  const topologies=[
-    {
-      id:1,
-      name:"拓扑一"
-    },
-    {
-      id:2,
-      name:"拓扑二"
-    },
-    {
-      id:3,
-      name:"拓扑三"
-    }
-    ];
+  const [topologies,setTopologies]=useState([{name:"",id:-1}]);
+  useEffect(()=>{
+    const getTopologies = async () => {
+      setTopologies([
+        {
+          id:1,
+          name:"拓扑一"
+        },
+        {
+          id:2,
+          name:"拓扑二"
+        },
+        {
+          id:3,
+          name:"拓扑三"
+        }
+      ]);
+    };
+    getTopologies()
+  },[]);
   const selectTopology=(e:any)=>{
       const topologyId=e.key;
+      alert(e.key)
       //todo,刷新当前的拓扑项目
   };
 

@@ -174,7 +174,7 @@ function Canvas() {
       //alert("后端新增该网线");
       console.log(changes.modifiedLinkData)
     }
-  };
+  }
 
  useEffect(()=>{
     const getDeviceInfo = async () => {
