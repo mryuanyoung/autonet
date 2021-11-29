@@ -84,7 +84,7 @@ function AttrubutionBox() {
         </Form>
       </Card>
     </Spin>
-  ) : <Empty imageStyle={{ height: '100%', width: '100%' }} />
+  ) : <Empty imageStyle={{ height: '60%', width: '100%' }} />
 }
 
 export default AttrubutionBox;
