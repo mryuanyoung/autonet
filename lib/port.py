@@ -17,11 +17,7 @@ class Port:
             self.__initByFile__(kwargs['conf'])
 
     def __configPort__(self):
-        telnetClient.exec_cmd("int "+self.__name)
-        telnetClient.exec_cmd("ip address "+self.__ip+" "+self.__mask)
-        if self.__isUp:
-            telnetClient.exec_cmd("no shut")
-        telnetClient.exec_cmd("exit")
+        telnetClient.config_port(self.__name, self.__ip, self.__mask, self.__isUp)
 
     def __initByFile__(self, conf):
         # print(conf)
