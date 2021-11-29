@@ -60,10 +60,10 @@ class Toplogies:
                 }
         return SUCCESS_INFO
 
-
-defaultConfFileName = "./example/example.json"
-defaultConfFile = open(defaultConfFileName, "r")
-defaultTop = Toplogy(conf=json.load(defaultConfFile))
-toplogies = Toplogies()
-toplogies.addToplogy(defaultTop)
+if __name__=="__main__":
+    defaultConfFileName = "./example/example.json"
+    defaultConfFile = open(defaultConfFileName, "r")
+    defaultTop = Toplogy(conf=json.load(defaultConfFile))
+    toplogies = Toplogies()
+    toplogies.addToplogy(defaultTop)
 

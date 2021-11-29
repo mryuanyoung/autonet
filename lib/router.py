@@ -3,6 +3,8 @@ from tools.counter import counter
 from tools.functions import option
 from lib.port import Port
 from models.toplogyMaps import portIDMap
+from tools.telnetClient import telnetClient
+from time import sleep
 class Router:
 
     def __init__(self, **kwargs):
@@ -22,9 +24,17 @@ class Router:
         self.__ip = option(self.__ip, conf['ip'])
         self.__mask = option(self.__mask, conf['mask'])
         self.__passwd = option(self.__passwd, conf['password'])
+        telnetClient.login_router(self.__ip, self.__passwd)
+        telnetClient.enable(self.__passwd)
+        telnetClient.conf()
         for portConf in conf['ports']:
             port = Port(conf=portConf)
             self.addPort(port)
+        telnetClient.end()
+        telnetClient.logout()
+        telnetClient.logout()
+        sleep(1)
+
 
     #添加端口
     def addPort(self, port):
