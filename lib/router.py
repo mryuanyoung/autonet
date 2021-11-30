@@ -5,6 +5,8 @@ from lib.port import Port
 from models.toplogyMaps import portIDMap
 from tools.telnetClient import telnetClient
 from time import sleep
+
+
 class Router:
 
     def __init__(self, **kwargs):
@@ -27,13 +29,17 @@ class Router:
         telnetClient.login_router(self.__ip, self.__passwd)
         telnetClient.enable(self.__passwd)
         telnetClient.conf()
+        telnetClient.change_name(self.__name)
         for portConf in conf['ports']:
             port = Port(conf=portConf)
             self.addPort(port)
-        telnetClient.end()
-        telnetClient.logout()
-        telnetClient.logout()
-        sleep(1)
+        #配置静态路由
+        for route_conf in conf['staticRoute']:
+            telnetClient.config_static_route(route_conf['ip'], route_conf['mask'], route_conf['passBy'])
+        #配置单域OSPF
+        for ospf_conf in conf['ospf']:
+            telnetClient.config_ospf(ospf_conf['processId'], ospf_conf['networks'])
+        telnetClient.exit_router()
 
 
     #添加端口

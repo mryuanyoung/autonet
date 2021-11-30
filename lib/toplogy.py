@@ -4,6 +4,8 @@ from tools.functions import option
 from lib.router import Router
 from models.toplogyMaps import routerIDMap, cabelIDMap
 from lib.cabel import Cabel
+
+
 class Toplogy:
 
     def __init__(self, **kwargs):
