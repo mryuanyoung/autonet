@@ -60,7 +60,7 @@ class Toplogies:
 
 
 if __name__ == "__main__":
-    defaultConfFileName = "./example/example.json"
+    defaultConfFileName = "./example/static.json"
     defaultConfFile = open(defaultConfFileName, "r")
     defaultTop = Toplogy(conf=json.load(defaultConfFile))
     toplogies = Toplogies()

@@ -81,8 +81,26 @@ class TelnetClient:
 telnetClient = TelnetClient()
 telnetClient.login(SWITCH_IP, SWITCH_TELNET_PASSWORD)
 telnetClient.enable(SWITCH_PASSWORD)
+# telnetClient.conf()
+# telnetClient.change_name("switch")
 
     # tc.logout()
 if __name__ == "__main__":
 
-    telnetClient.exec_cmd("sh ip route")
+    telnetClient.exec_cmd("terminal length 0")
+
+    routeFile = open("/Users/ma/Desktop/autonet/command/ipRoute.txt", "w")
+    routeFile.write(telnetClient.exec_cmd("sh ip route"))
+    routeFile.close()
+
+    time.sleep(1)
+
+    intFiles = open("/Users/ma/Desktop/autonet/command/interfaces.txt", "w")
+    intFiles.write(telnetClient.exec_cmd("sh interfaces"))
+    intFiles.close()
+
+    time.sleep(1)
+
+    runFiles = open("/Users/ma/Desktop/autonet/command/run.txt", "w")
+    runFiles.write(telnetClient.exec_cmd("sh run brief"))
+    runFiles.close()

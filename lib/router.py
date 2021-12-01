@@ -26,6 +26,7 @@ class Router:
         self.__ip = option(self.__ip, conf['ip'])
         self.__mask = option(self.__mask, conf['mask'])
         self.__passwd = option(self.__passwd, conf['password'])
+        sleep(0.5)
         telnetClient.login_router(self.__ip, self.__passwd)
         telnetClient.enable(self.__passwd)
         telnetClient.conf()
