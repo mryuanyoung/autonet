@@ -65,4 +65,8 @@ class Toplogy:
 
     #失效拓扑图
     def deActivate(self):
+        for router in self.__routers:
+            router.enterConfigMode()
+            router.deleteConf()
+            router.exit()
         self.__isActivate = False

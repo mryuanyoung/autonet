@@ -13,17 +13,18 @@ class Toplogies:
         self.__currentActiveTop = None
 
     # 决定当前应该生效的top
-    def decideActiveTop(self, toplogy):
+    def decideActiveTop(self, toplogyId):
         if self.__currentActiveTop:
             self.__currentActiveTop.deActivate()
+        toplogy = topIDMap[toplogyId]
         toplogy.activate()
         self.__currentActiveTop = toplogy
 
     # 默认新建拓扑时，将正在生效的拓扑设为失效，并将该拓扑设为生效
     def addToplogy(self, toplogy):
-        self.decideActiveTop(toplogy)
-        self.__toplogies.append(toplogy)
         topIDMap[toplogy.getID()] = toplogy
+        self.decideActiveTop(toplogy.getID())
+        self.__toplogies.append(toplogy)
 
     # 查看拓扑信息
     def getToplogy(self, topId):

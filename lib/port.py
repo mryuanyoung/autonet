@@ -24,7 +24,7 @@ class Port:
         except:
             pass
 
-    def delete_conf(self):
+    def deleteConf(self):
         try:
             telnetClient.delete_port_conf(self.__name, self.__ip, self.__mask)
         except:

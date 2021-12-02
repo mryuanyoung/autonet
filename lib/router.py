@@ -102,7 +102,7 @@ class Router:
 
         #删除不再使用的端口配置
         for port in wait4Delete:
-            port.delete_conf()
+            port.deleteConf()
             self.__ports.pop(port.getID())
 
         #同步conf文件
@@ -134,6 +134,18 @@ class Router:
         except:
             pass
         self.__conf['ospf'] = ospf
+
+    # 默认在config模式下
+    def deleteConf(self):
+        for port in self.__ports:
+            port.deleteConf()
+        try:
+            for routeConf in self.__conf['staticRoute']:
+                telnetClient.delete_static_route(routeConf['ip'], routeConf['mask'], routeConf['passBy'])
+            for ospfConf in self.__conf['ospf']:
+                telnetClient.delete_ospf(ospfConf['processId'])
+        except:
+            pass
 
 
     #添加端口
