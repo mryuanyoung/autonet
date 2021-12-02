@@ -1,7 +1,8 @@
-from models.defineConst import IP_UNDEFINED, MASK_UNDEFINED, PORT_NAME_PRE
+from models.defineConst import IP_UNDEFINED, MASK_UNDEFINED, PORT_NAME_PRE, DEFAULT_PATTERN
 from tools.counter import counter
 from tools.functions import option
 from tools.telnetClient import telnetClient
+import re
 
 
 class Port:
@@ -13,23 +14,59 @@ class Port:
         self.__name = PORT_NAME_PRE + str(self.__id)
         self.__type = 0
         self.__isUp = False
+        self.__pattern = ""
         if 'conf' in kwargs:
             self.__initByFile__(kwargs['conf'])
 
     def __configPort__(self):
-        telnetClient.config_port(self.__name, self.__ip, self.__mask, self.__isUp)
+        try:
+            telnetClient.config_port(self.__name, self.__ip, self.__mask, self.__isUp)
+        except:
+            pass
+
+    def delete_conf(self):
+        try:
+            telnetClient.delete_port_conf(self.__name, self.__ip, self.__mask)
+        except:
+            pass
 
     def __initByFile__(self, conf):
-        # print(conf)
-        self.__name = option(self.__name, conf['name'])
+        self.changePort(conf)
+
+    def __generateReAndName__(self, name):
+        self.__name = name
+        pattern = re.compile(DEFAULT_PATTERN)
+        m = pattern.match(name)
+        if m:
+            portLetters = m.group(1)
+            portNumber = m.group(2)
+            name = portLetters[0].lower()+portNumber
+            self.__pattern = "(" + "[" + name[0] + name[0].upper() + "]" + "\\D*" + ")" \
+                             + "(" + portNumber + ")"
+
+        else:
+            #TODO 抛出异常
+            pass
+        pass
+
+    def changePort(self, conf):
+        self.__generateReAndName__(conf['name'])
         self.__conf = option(self.__conf, conf)
         self.__ip = option(self.__ip, conf['ip'])
         self.__mask = option(self.__mask, conf['mask'])
         self.__isUp = option(self.__ip, conf["isUp"])
-        self.__configPort__()
+        try:
+            self.__configPort__()
+        except:
+            pass
+
+
 
     def getID(self):
         return self.__id
+
+    def getRegex(self):
+        return self.__pattern
 
     def toSimpleJson(self):
         return {"id": self.__id,
@@ -39,8 +76,31 @@ class Port:
     def toJson(self):
         return {"id": self.__id,
                 "name": self.__name,
+                "regex": self.__pattern,
                 "ip": self.__ip,
                 "mask": self.__mask,
                 "isUp": self.__isUp}
+
+    def toJsonFile(self):
+        return self.__conf
+
+if __name__=="__main__":
+    pattern = re.compile(DEFAULT_PATTERN)
+    s1 = "s0/0/0"
+    s2 = "Serial0/0/0"
+    s3 = "f0/1"
+    s4 = "FastEth0/1"
+    m = pattern.match(s2)
+    if m:
+        portLetters = m.group(1)
+        portNumber = m.group(2)
+        name = portLetters[0].lower()+portNumber
+        geneP = "(" + "[" + name[0] + name[0].upper() + "]" + "\\D*" + ")" \
+                             + "(" + portNumber + ")"
+        print(name, geneP)
+        pattern = re.compile(geneP)
+        m = pattern.match(s1)
+        print(m.group(1))
+        print(m.group(2))
 
 
