@@ -153,6 +153,11 @@ async def changeRouterStaticRoutes(id, routerId, routes: StaticRoutes):
 async def changeRouterOSPF(id, routerId, ospf: OSPF):
     return toplogies.changeRouterSetting(routerId, ospf=ospf.ospf)
 
+# 选择路由生效
+@app.get("/toplogy/{id}/select")
+async def activateRouter(id):
+    return toplogies.decideActiveTop(id)
+
 fake_db = [1, 23, 456]
 
 

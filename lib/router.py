@@ -24,6 +24,7 @@ class Router:
         self.__name = ROUTER_NAME_PRE + str(self.__id)
         self.__passwd = PASSWD_UNDEFINED
         self.__ports = dict()
+        self.__isActivate = False
         if 'conf' in kwargs:
             self.__initByFile__(kwargs['conf'])
 
@@ -32,19 +33,35 @@ class Router:
         self.__ip = option(self.__ip, conf['ip'])
         self.__mask = option(self.__mask, conf['mask'])
         self.__passwd = option(self.__passwd, conf['password'])
-        sleep(SLEEP_TIME)
+        self.config(conf)
+        # 配置端口
+        self.configPort(conf['ports'])
+
+    def config(self, conf):
+        if self.__isActivate:
+            sleep(SLEEP_TIME)
         # 进入配置模式
         self.enterConfigMode()
         # 配置hostname
         self.configHost(conf['name'])
-        # 配置端口
-        self.configPort(conf['ports'])
         # 配置静态路由
         self.configStaticRoute(conf['staticRoute'])
         # 配置单域OSPF
         self.configOSPF(conf['ospf'])
         # 退出路由器
         self.exit()
+
+    def activate(self):
+        self.__isActivate = True
+        for port in self.__ports.values():
+            port.activate()
+        self.config(self.__conf)
+
+    def deActivate(self):
+        self.deleteConf()
+        self.__isActivate = False
+        for port in self.__ports.values():
+            port.deActivate()
 
     def exit(self):
         try:
@@ -54,21 +71,21 @@ class Router:
             # print("连接失败")
 
     def enterConfigMode(self):
-        try:
-            telnetClient.login_router(self.__ip, self.__passwd)
-            telnetClient.enable(self.__passwd)
-            telnetClient.set_terminal_length()
-            telnetClient.conf()
-        except:
-            logging.info("进入config模式失败." + self._get_msg_())
-            # print("连接失败")
+        if self.__isActivate:
+            try:
+                telnetClient.login_router(self.__ip, self.__passwd)
+                telnetClient.enable(self.__passwd)
+                telnetClient.set_terminal_length()
+                telnetClient.conf()
+            except:
+                logging.info("进入config模式失败." + self._get_msg_())
 
     def configHost(self, name):
-        try:
-            telnetClient.change_name(name)
-        except:
-            logging.info("修改名称失败." + self._get_msg_())
-            # print("连接失败")
+        if self.__isActivate:
+            try:
+                telnetClient.change_name(name)
+            except:
+                logging.info("修改名称失败." + self._get_msg_())
         self.__name = name
         self.__conf['name'] = name
 
@@ -78,6 +95,7 @@ class Router:
             if regex.match(port['name']):
                 return True
         return False
+
 
     # 默认在config模式
     def configPort(self, ports):
@@ -99,60 +117,65 @@ class Router:
         # 新加入端口
         for portConf in wait4Add:
             port = Port(conf=portConf)
+            if self.__isActivate:
+                port.activate()
             self.addPort(port)
 
         # 配置已有的端口
         for i in range(len(wait4ConfigPorts)):
             wait4ConfigPorts[i].changePort(wait4Config[i])
-            self.__ports[wait4ConfigPorts[i].getID()] = wait4ConfigPorts[i]
+            if self.__isActivate:
+                self.__ports[wait4ConfigPorts[i].getID()] = wait4ConfigPorts[i]
+            wait4ConfigPorts[i].activate()
 
         # 删除不再使用的端口配置
         for port in wait4Delete:
-            port.deleteConf()
+            port.deActivate()
             self.__ports.pop(port.getID())
 
         # 同步conf文件
         self.__conf['ports'] = ports
 
+
+
     # 默认在config模式
     def configStaticRoute(self, staticRoute):
-        wait4Delete = [route for route in self.__conf['staticRoute'] if route not in staticRoute]
-        wait4Config = [route for route in staticRoute if route not in self.__conf['staticRoute']]
-        try:
-            for routeConf in wait4Delete:
-                telnetClient.delete_static_route(routeConf['ip'], routeConf['mask'], routeConf['passBy'])
-            for routeConf in wait4Config:
-                telnetClient.config_static_route(routeConf['ip'], routeConf['mask'], routeConf['passBy'])
-        except:
-            logging.info('配置静态路由失败.' + self._get_msg_() + 'static route: ' + str(staticRoute))
-            # print("连接失败")
+        if self.__isActivate:
+            wait4Delete = [route for route in self.__conf['staticRoute'] if route not in staticRoute]
+            wait4Config = [route for route in staticRoute if route not in self.__conf['staticRoute']]
+            try:
+                for routeConf in wait4Delete:
+                    telnetClient.delete_static_route(routeConf['ip'], routeConf['mask'], routeConf['passBy'])
+                for routeConf in wait4Config:
+                    telnetClient.config_static_route(routeConf['ip'], routeConf['mask'], routeConf['passBy'])
+            except:
+                logging.info('配置静态路由失败.' + self._get_msg_() + 'static route: ' + str(staticRoute))
         self.__conf['staticRoute'] = staticRoute
 
     # 默认在config模式
     def configOSPF(self, ospf):
-        try:
-            processIds = list(set(map(lambda x: x['processId']), ospf))
-            for processId in processIds:
-                telnetClient.delete_ospf(processId)
-            for ospfConf in ospf:
-                telnetClient.config_ospf(ospfConf['processId'], ospfConf['networks'])
-        except:
-            logging.info('配置ospf失败.' + self._get_msg_() + 'ospf: ' + str(ospf))
-            # print("连接失败")
+        if self.__isActivate:
+            try:
+                processIds = list(set(map(lambda x: x['processId']), ospf))
+                for processId in processIds:
+                    telnetClient.delete_ospf(processId)
+                for ospfConf in ospf:
+                    telnetClient.config_ospf(ospfConf['processId'], ospfConf['networks'])
+            except:
+                logging.info('配置ospf失败.' + self._get_msg_() + 'ospf: ' + str(ospf))
         self.__conf['ospf'] = ospf
 
     # 默认在config模式下
     def deleteConf(self):
-        for port in self.__ports:
-            port.deleteConf()
-        try:
-            for routeConf in self.__conf['staticRoute']:
-                telnetClient.delete_static_route(routeConf['ip'], routeConf['mask'], routeConf['passBy'])
-            for ospfConf in self.__conf['ospf']:
-                telnetClient.delete_ospf(ospfConf['processId'])
-        except:
-            logging.info('删除配置失败.' + self._get_msg_())
-            # print("连接失败")
+        if self.__isActivate:
+            try:
+                for routeConf in self.__conf['staticRoute']:
+                    telnetClient.delete_static_route(routeConf['ip'], routeConf['mask'], routeConf['passBy'])
+                for ospfConf in self.__conf['ospf']:
+                    telnetClient.delete_ospf(ospfConf['processId'])
+            except:
+                logging.info('删除配置失败.' + self._get_msg_())
+
 
     # 添加端口
     def addPort(self, port):
@@ -175,6 +198,7 @@ class Router:
     def toJson(self):
         return {"id": self.__id,
                 "name": self.__name,
+                "isActive": self.__isActivate,
                 "ip": self.__ip,
                 "mask": self.__mask,
                 "portCount": len(self.__ports.values()),
@@ -183,6 +207,9 @@ class Router:
 
     def toJsonFile(self):
         return self.__conf
+
+    def isActivate(self):
+        return self.__isActivate
 
     def _get_msg_(self):
         return 'RouterMsg:: name: {}, id: {}, ip: {}'.format(self.__name, self.__id, self.__ip)
@@ -218,3 +245,4 @@ if __name__ == "__main__":
     wait4Config = [route for route in staticR2 if route not in staticR1]
     print(wait4Delete)
     print(wait4Config)
+

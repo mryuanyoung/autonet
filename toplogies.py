@@ -16,14 +16,15 @@ class Toplogies:
     def decideActiveTop(self, toplogyId):
         if self.__currentActiveTop:
             self.__currentActiveTop.deActivate()
+        toplogyId = int(toplogyId)
         toplogy = topIDMap[toplogyId]
         toplogy.activate()
         self.__currentActiveTop = toplogy
+        return toplogy.toJson()
 
     # 默认新建拓扑时，将正在生效的拓扑设为失效，并将该拓扑设为生效
     def addToplogy(self, toplogy):
         topIDMap[toplogy.getID()] = toplogy
-        self.decideActiveTop(toplogy.getID())
         self.__toplogies.append(toplogy)
 
     # 查看拓扑信息
@@ -64,7 +65,8 @@ class Toplogies:
         if routerId not in routerIDMap.keys():
             return FAILURE_INFO
         router = routerIDMap[routerId]
-        router.enterConfigMode()
+        if router.isActivate():
+            router.enterConfigMode()
         if 'name' in kwargs:
             router.configHost(kwargs['name'])
             SUCCESS_INFO['data'] = router.toSimpleJson()
@@ -90,8 +92,16 @@ class Toplogies:
 
 #
 # if __name__ == "__main__":
-defaultConfFileName = "./example/static.json"
+defaultConfFileName = "./example/example.json"
 defaultConfFile = open(defaultConfFileName, "r")
 defaultTop = Toplogy(conf=json.load(defaultConfFile))
+defaultConfFile.close()
+
+defaultStaticFileName = "./example/static.json"
+defaultStaticFile = open(defaultStaticFileName, "r")
+defaultStatic = Toplogy(conf=json.load(defaultStaticFile))
+defaultStaticFile.close()
+
 toplogies = Toplogies()
 toplogies.addToplogy(defaultTop)
+toplogies.addToplogy(defaultStatic)
