@@ -3,6 +3,7 @@ from tools.counter import counter
 from tools.functions import option
 from tools.telnetClient import telnetClient
 import re
+import logging
 
 
 class Port:
@@ -22,13 +23,13 @@ class Port:
         try:
             telnetClient.config_port(self.__name, self.__ip, self.__mask, self.__isUp)
         except:
-            pass
+            print("连接失败")
 
     def deleteConf(self):
         try:
             telnetClient.delete_port_conf(self.__name, self.__ip, self.__mask)
         except:
-            pass
+            print("连接失败")
 
     def __initByFile__(self, conf):
         self.changePort(conf)
@@ -45,9 +46,7 @@ class Port:
                              + "(" + portNumber + ")"
 
         else:
-            #TODO 抛出异常
-            pass
-        pass
+            logging.info("[port: changePort 49]: 修改端口失败")
 
     def changePort(self, conf):
         self.__generateReAndName__(conf['name'])
@@ -58,7 +57,7 @@ class Port:
         try:
             self.__configPort__()
         except:
-            pass
+            logging.info("[port: changePort]: 修改端口失败")
 
 
 

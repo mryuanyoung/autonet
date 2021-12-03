@@ -47,7 +47,7 @@ class Router:
         try:
             telnetClient.exit_router()
         except:
-            pass
+            print("连接失败")
 
     def enterConfigMode(self):
         try:
@@ -56,13 +56,13 @@ class Router:
             telnetClient.set_terminal_length()
             telnetClient.conf()
         except:
-            pass
+            print("连接失败")
 
     def configHost(self, name):
         try:
             telnetClient.change_name(name)
         except:
-            pass
+            print("连接失败")
         self.__name = name
         self.__conf['name'] = name
 
@@ -120,7 +120,7 @@ class Router:
             for routeConf in wait4Config:
                 telnetClient.config_static_route(routeConf['ip'], routeConf['mask'], routeConf['passBy'])
         except:
-            pass
+            print("连接失败")
         self.__conf['staticRoute'] = staticRoute
 
     # 默认在config模式
@@ -132,7 +132,7 @@ class Router:
             for ospfConf in ospf:
                 telnetClient.config_ospf(ospfConf['processId'], ospfConf['networks'])
         except:
-            pass
+            print("连接失败")
         self.__conf['ospf'] = ospf
 
     # 默认在config模式下
@@ -145,7 +145,7 @@ class Router:
             for ospfConf in self.__conf['ospf']:
                 telnetClient.delete_ospf(ospfConf['processId'])
         except:
-            pass
+            print("连接失败")
 
 
     #添加端口
