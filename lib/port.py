@@ -5,6 +5,11 @@ from tools.telnetClient import telnetClient
 import re
 import logging
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(filename)s[line:%(lineno)d func:%(funcName)s] - %(levelname)s: %(message)s')
+
 
 class Port:
     def __init__(self, **kwargs):
@@ -23,13 +28,15 @@ class Port:
         try:
             telnetClient.config_port(self.__name, self.__ip, self.__mask, self.__isUp)
         except:
-            print("连接失败")
+            logging.info("配置port失败." + self._get_msg())
+            # print("连接失败")
 
     def deleteConf(self):
         try:
             telnetClient.delete_port_conf(self.__name, self.__ip, self.__mask)
         except:
-            print("连接失败")
+            logging.info("删除port配置失败." + self._get_msg())
+            # print("连接失败")
 
     def __initByFile__(self, conf):
         self.changePort(conf)
@@ -41,12 +48,13 @@ class Port:
         if m:
             portLetters = m.group(1)
             portNumber = m.group(2)
-            name = portLetters[0].lower()+portNumber
+            name = portLetters[0].lower() + portNumber
             self.__pattern = "(" + "[" + name[0] + name[0].upper() + "]" + "\\D*" + ")" \
                              + "(" + portNumber + ")"
 
         else:
-            logging.info("[port: changePort 49]: 修改端口失败")
+            logging.info("修改port失败." + "newName: " + name + self._get_msg())
+            # logging.info("[port: changePort 49]: 修改端口失败")
 
     def changePort(self, conf):
         self.__generateReAndName__(conf['name'])
@@ -57,15 +65,17 @@ class Port:
         try:
             self.__configPort__()
         except:
-            logging.info("[port: changePort]: 修改端口失败")
-
-
+            logging.info('修改port配置失败.'+'newConf: '+str(conf)+self._get_msg())
+            # logging.info("[port: changePort]: 修改端口失败")
 
     def getID(self):
         return self.__id
 
     def getRegex(self):
         return self.__pattern
+
+    def _get_msg(self):
+        return 'PortMsg:: name:{}, id: {}, ip: {}'.format(self.__name, self.__id, self.__ip, )
 
     def toSimpleJson(self):
         return {"id": self.__id,
@@ -83,7 +93,8 @@ class Port:
     def toJsonFile(self):
         return self.__conf
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     pattern = re.compile(DEFAULT_PATTERN)
     s1 = "s0/0/0"
     s2 = "Serial0/0/0"
@@ -93,13 +104,11 @@ if __name__=="__main__":
     if m:
         portLetters = m.group(1)
         portNumber = m.group(2)
-        name = portLetters[0].lower()+portNumber
+        name = portLetters[0].lower() + portNumber
         geneP = "(" + "[" + name[0] + name[0].upper() + "]" + "\\D*" + ")" \
-                             + "(" + portNumber + ")"
+                + "(" + portNumber + ")"
         print(name, geneP)
         pattern = re.compile(geneP)
         m = pattern.match(s1)
         print(m.group(1))
         print(m.group(2))
-
-
