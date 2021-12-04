@@ -62,7 +62,13 @@ class Toplogy:
     #激活拓扑图
     def activate(self):
         self.__isActivate = True
+        for router in self.__routers:
+            router.activate()
 
     #失效拓扑图
     def deActivate(self):
         self.__isActivate = False
+        for router in self.__routers:
+            router.enterConfigMode()
+            router.deActivate()
+            router.exit()

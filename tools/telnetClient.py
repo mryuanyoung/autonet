@@ -17,20 +17,40 @@ class TelnetClient:
         telnetClient.exec_cmd("telnet " + host_ip)
         telnetClient.enable(password)
 
-    def config_port(self, port_name, port_ip, mask, is_up):
+    def enter_port_mode(self, port_name):
         telnetClient.exec_cmd("int " + port_name)
+
+    def config_port(self, port_name, port_ip, mask, is_up):
+        telnetClient.enter_port_mode(port_name)
         telnetClient.exec_cmd("ip address " + port_ip + " " + mask)
         if is_up:
-            telnetClient.exec_cmd("no shut")
+            telnetClient.no_shut()
         telnetClient.exec_cmd("exit")
 
     def config_static_route(self, ip, mask, pass_by):
         telnetClient.exec_cmd("ip route " + ip + " " + mask + " " + pass_by)
 
+    def delete_static_route(self, ip, mask, pass_by):
+        telnetClient.exec_cmd("no ip route " + ip + " " + mask + " " + pass_by)
+
     def config_ospf(self, process_id, networks):
         telnetClient.exec_cmd("router ospf " + process_id)
         for network in networks:
             telnetClient.exec_cmd("network " + network['ip'] + network['mask'] + " area " + str(network['area']))
+
+    def delete_ospf(self, process_id):
+        telnetClient.exec_cmd("no router ospf "+str(process_id))
+
+    def delete_port_conf(self, port_name, ip, mask):
+        telnetClient.enter_port_mode(port_name)
+        telnetClient.exec_cmd("no ip address " + ip + " " + mask)
+        telnetClient.exec_cmd("exit")
+
+    def shut(self):
+        telnetClient.exec_cmd("shut")
+
+    def no_shut(self):
+        telnetClient.exec_cmd("no shut")
 
     def login(self, host_ip, password):
         try:
@@ -46,6 +66,9 @@ class TelnetClient:
             return False
         print('登陆成功')
         return True
+
+    def set_terminal_length(self):
+        self.exec_cmd("terminal length 0")
 
     def exit_router(self):
         self.end()
@@ -78,11 +101,29 @@ class TelnetClient:
         print("===================")
         return res
 
-telnetClient = TelnetClient()
-telnetClient.login(SWITCH_IP, SWITCH_TELNET_PASSWORD)
-telnetClient.enable(SWITCH_PASSWORD)
 
-    # tc.logout()
+telnetClient = TelnetClient()
+# telnetClient.login(SWITCH_IP, SWITCH_TELNET_PASSWORD)
+# telnetClient.enable(SWITCH_PASSWORD)
+# telnetClient.conf()
+# telnetClient.change_name("switch")
+# tc.logout()
 if __name__ == "__main__":
 
-    telnetClient.exec_cmd("sh ip route")
+    telnetClient.set_terminal_length()
+
+    routeFile = open("/Users/ma/Desktop/autonet/command/ipRoute.txt", "w")
+    routeFile.write(telnetClient.exec_cmd("sh ip route"))
+    routeFile.close()
+
+    time.sleep(1)
+
+    intFiles = open("/Users/ma/Desktop/autonet/command/interfaces.txt", "w")
+    intFiles.write(telnetClient.exec_cmd("sh interfaces"))
+    intFiles.close()
+
+    time.sleep(1)
+
+    runFiles = open("/Users/ma/Desktop/autonet/command/run.txt", "w")
+    runFiles.write(telnetClient.exec_cmd("sh run brief"))
+    runFiles.close()

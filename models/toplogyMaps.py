@@ -1,4 +1,5 @@
 topIDMap = dict()
 routerIDMap = dict()
 portIDMap = dict()
+portRegexMap = dict()
 cabelIDMap = dict()
