@@ -27,7 +27,7 @@ export const mockRouter: Router = {
   "portCount": 4,
   //密码
   "password": '123456',
-  "ports":[
+  "ports": [
     {
       "id": 123,
       "name": "s0/0/0",
@@ -56,10 +56,30 @@ export const defaultPortInfo: Partial<Port> = {
   isUp: false
 }
 
+export interface RealConfig {
+  ip: string,
+  mask: string,
+  passBy: string,
+  area: number,
+}
+
+export interface OSPFConfig {
+  processId: number,
+  networks: Array<Omit<RealConfig, 'passBy'>>
+}
+
 export function getRouterInfo(topologyId: number, routerId: number): Promise<Response<Router>> {
   return Axios.get(`/toplogy/${topologyId}/router/${routerId}`)
 }
 
-export function updateRouter(topologyId: number, routerId: number, data: Partial<Port>){
-  return Axios.post(`/toplogy/${topologyId}/router/${routerId}`, data)
+export function updatePort(topologyId: number, routerId: number, data: Array<Partial<Port>>) {
+  return Axios.post(`/toplogy/${topologyId}/router/${routerId}/ports`, data)
+}
+
+export function configStaticRoute(topologyId: number, routerId: number, data: Array<Omit<RealConfig, 'area'>>) {
+  return Axios.post(`/toplogy/${topologyId}/router/${routerId}/static`, { staticRoute: data })
+}
+
+export function configOSPFRoute(topologyId: number, routerId: number, data: Array<OSPFConfig>) {
+  return Axios.post(`/toplogy/${topologyId}/router/${routerId}/ospf`, { ospf: { processId: 1, isUp: true, network: data } })
 }
