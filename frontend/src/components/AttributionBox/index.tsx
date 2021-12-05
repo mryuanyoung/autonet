@@ -6,7 +6,7 @@ import ConfigModal, { ModalProps } from './ConfigModal';
 import style from './index.module.css';
 import './index.css';
 
-function AttrubutionBox() {
+function AttributionBox() {
 
   const { fresh, topologyId, deviceId, setFresh } = useAppContext();
   const [config, setConfig] = useState<Router>();
@@ -97,4 +97,4 @@ function AttrubutionBox() {
   ) : <Empty imageStyle={{ height: '60%', width: '100%' }} />
 }
 
-export default AttrubutionBox;
+export default AttributionBox;
