@@ -1,13 +1,13 @@
-from models.defineConst import IP_UNDEFINED, MASK_UNDEFINED, PORT_NAME_PRE, ID_UNDEFINED
+from models.defineConst import IP_UNDEFINED, MASK_UNDEFINED, PORT_NAME_PRE, ID_UNDEFINED, NAME_UNDEFINED
 from tools.counter import counter
 from tools.functions import option
 class Cabel:
     def __init__(self, **kwargs):
         self.__id = counter.generateCabelID()
         self.__r1 = ID_UNDEFINED
-        self.__p1 = ID_UNDEFINED
+        self.__p1 = NAME_UNDEFINED
         self.__r2 = ID_UNDEFINED
-        self.__p2 = ID_UNDEFINED
+        self.__p2 = NAME_UNDEFINED
         if 'conf' in kwargs:
             self.__initByFile__(kwargs['conf'])
 
@@ -20,7 +20,9 @@ class Cabel:
     def toSimpleJson(self):
         return {"id": self.__id,
                 "r1Id": self.__r1,
-                "r2Id": self.__r2}
+                "port1Name": self.__p1,
+                "r2Id": self.__r2,
+                "port2Name": self.__p2}
 
     def getID(self):
         return self.__id

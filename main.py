@@ -4,8 +4,26 @@ from enum import Enum
 from toplogies import toplogies
 from lib.toplogy import Toplogy
 from models.models import Ports, StaticRoutes, OSPF
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://api.zwnsyw.com",
+    "https://api.zwnsyw.com",
+    "http://localhost",
+    "http://localhost:8000",
+    "http://localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 @app.get("/")

@@ -92,10 +92,10 @@ class Toplogies:
 
 #
 # if __name__ == "__main__":
-defaultConfFileName = "./example/example.json"
-defaultConfFile = open(defaultConfFileName, "r")
-defaultTop = Toplogy(conf=json.load(defaultConfFile))
-defaultConfFile.close()
+# defaultConfFileName = "./example/example.json"
+# defaultConfFile = open(defaultConfFileName, "r")
+# defaultTop = Toplogy(conf=json.load(defaultConfFile))
+# defaultConfFile.close()
 
 defaultStaticFileName = "./example/static.json"
 defaultStaticFile = open(defaultStaticFileName, "r")
@@ -103,5 +103,5 @@ defaultStatic = Toplogy(conf=json.load(defaultStaticFile))
 defaultStaticFile.close()
 
 toplogies = Toplogies()
-toplogies.addToplogy(defaultTop)
+# toplogies.addToplogy(defaultTop)
 toplogies.addToplogy(defaultStatic)

@@ -90,6 +90,42 @@
                     "ip":"192.168.23.3",
                     "mask":"255.255.255.0",
                     "isUp": true
+                },
+                {
+                    "name":"s0/0/1",
+                    "ip":"",
+                    "mask":"",
+                    "isUp": false
+                },
+                {
+                    "name":"f0/0",
+                    "ip":"",
+                    "mask":"",
+                    "isUp": false
+                },
+                {
+                    "name":"f0/1",
+                    "ip":"",
+                    "mask":"",
+                    "isUp": false
+                },
+                {
+                    "name":"lo0",
+                    "ip":"",
+                    "mask":"",
+                    "isUp": false
+                },
+                {
+                    "name":"lo1",
+                    "ip":"",
+                    "mask":"",
+                    "isUp": false
+                },
+                {
+                    "name":"lo2",
+                    "ip":"",
+                    "mask":"",
+                    "isUp": false
                 }
             ],
             "staticRoute": [
