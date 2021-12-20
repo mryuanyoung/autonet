@@ -180,154 +180,21 @@ function Canvas() {
     (async function () {
       try {
         const res = await getTopologyInfo(topologyId);
-        //todo 接入后端
-        // const res={
-        //   "code": 0,
-        //   "message": "success",
-        //   "data": {
-        //     "id": 2323,
-        //     "name": "toplogy1",
-        //     //true表示该文件是正在生效的拓扑文件
-        //     "isActive": true,
-        //     //路由器数量
-        //     "routerCount": 3,
-        //     //路由器列表
-        //     "routers":[
-        //       {
-        //         "id": 123,
-        //         "name": "routerA",
-        //         "ip": "172.16.0.1",
-        //         //子网掩码
-        //         "mask": "255.255.0.0",
-        //         //端口数量
-        //         "portCount": 4,
-        //         //密码
-        //         "password": 123456,
-        //         "ports":[
-        //           {
-        //             "name": "s0/0/0",
-        //             "isUp": true
-        //           },
-        //           {
-        //             "name": "s0/1/0",
-        //             "isUp": true
-        //           },
-        //           {
-        //             "name": "f0/0/0",
-        //             "isUp": true
-        //           },
-        //           {
-        //             "name": "f0/1/0",
-        //             "isUp": true
-        //           }
-        //         ]
-        //       },
-        //       {
-        //         "id": 124,
-        //         "name": "routerB",
-        //         "ip": "172.16.0.1",
-        //         //子网掩码
-        //         "mask": "255.255.0.0",
-        //         //端口数量
-        //         "portCount": 4,
-        //         //密码
-        //         "password": 123456,
-        //         "ports":[
-        //           {
-        //             "name": "s0/0/0",
-        //             "isUp": true
-        //           },
-        //           {
-        //             "name": "s0/1/0",
-        //             "isUp": true
-        //           },
-        //           {
-        //             "name": "f0/0/0",
-        //             "isUp": true
-        //           },
-        //           {
-        //             "name": "f0/1/0",
-        //             "isUp": true
-        //           }
-        //         ]
-        //       },
-        //       {
-        //         "id": 125,
-        //         "name": "routerC",
-        //         "ip": "172.16.0.1",
-        //         //子网掩码
-        //         "mask": "255.255.0.0",
-        //         //端口数量
-        //         "portCount": 4,
-        //         //密码
-        //         "password": 123456,
-        //         "ports":[
-        //           {
-        //             "name": "s0/0/0",
-        //             "isUp": true
-        //           },
-        //           {
-        //             "name": "s0/1/0",
-        //             "isUp": true
-        //           },
-        //           {
-        //             "name": "f0/0/0",
-        //             "isUp": true
-        //           },
-        //           {
-        //             "name": "f0/1/0",
-        //             "isUp": true
-        //           }
-        //         ]
-        //       }
-        //     ],
-        //     //网线数量
-        //     cabelCount: 6,
-        //     //网线列表
-        //     "cabels":[
-        //       {
-        //         "id": 1,
-        //         "Router1Id":123,
-        //         "port1":{
-        //           "name": "s0/0/0",
-        //           "isUp": true
-        //         },
-        //         "Router2Id":124,
-        //         "port2":{
-        //           "name": "s0/0/0",
-        //           "isUp": true
-        //         }
-        //       },
-        //       {
-        //         "id": 2,
-        //         "Router1Id":124,
-        //         "port1":{
-        //           "name": "s0/1/0",
-        //           "isUp": true
-        //         },
-        //         "Router2Id":125,
-        //         "port2":{
-        //           "name": "s0/0/0",
-        //           "isUp": true
-        //         }
-        //       }
-        //     ]
-        //   }
-        // };
-        const nodes=res.data.routers.map((value: { id: any; name: any; ports: any[]; })=>{
+        console.log(res.data)
+        const nodes=res.data.routers.map((value: any)=>{
           return {
             "key": value.id,
             "name": value.name,
             "source":Router,
-            "topArray":value.ports.map((port)=>{
-              if(port.name=="s0/0/0"||port.name=="s0/1/0"){
+            "topArray":value.ports.map((port:any)=>{
+              if(port.name=="s0/0/0"||port.name=="s0/0/1"){
                 return {
                   "portId":port.name
                 }
               }
             }),
-            "bottomArray":value.ports.map((port)=>{
-              if(port.name=="f0/0/0"||port.name=="f0/1/0"){
+            "bottomArray":value.ports.map((port:any)=>{
+              if(port.name=="f0/0"||port.name=="f0/1"){
                 return {
                   "portId":port.name
                 }
@@ -335,13 +202,13 @@ function Canvas() {
             })
           }
         });
-        const links=res.data.cabels.map((value: { id: any; Router1Id: any; Router2Id: any; port1: { name: any; }; port2: { name: any; }; })=>{
+        const links=res.data.cabels.map((value: any)=>{
           return {
             "id":value.id,
-            "from":value.Router1Id,
-            "to":value.Router2Id,
-            "fromPort":value.port1.name,
-            "toPort":value.port2.name
+            "from":value.r1Id,
+            "to":value.r2Id,
+            "fromPort":value.port1Name,
+            "toPort":value.port2Name
           }
         });
         console.log(nodes,links);
@@ -352,7 +219,7 @@ function Canvas() {
         console.log(err);
       }
     })()
-  }, [topologyId, deviceId, fresh]);
+  }, [topologyId, deviceId]);
 
   return (
     <div style={{paddingTop:'30px'}}>

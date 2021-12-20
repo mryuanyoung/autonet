@@ -34,11 +34,11 @@ function App() {
     >
       <Layout style={{ height: '100vh' }}>
         <Sider width={200} collapsible collapsedWidth={0} zeroWidthTriggerStyle={{ top: 0 }} >
-
+          <TopologyMenu/>
         </Sider>
         <Layout style={{display: 'flex', flexDirection: 'row'}}>
           <Layout style={{width: '40vw'}}>
-            <Content></Content>
+            <Content><Canvas/></Content>
           </Layout>
           <Layout style={{height: '100vh'}}>
             <Content style={{height: '50vh'}}><AttributionBox /></Content>
