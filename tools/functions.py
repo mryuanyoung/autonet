@@ -24,6 +24,5 @@ def getPortRegexFromName(name):
         geneP = "(" + "[" + name[0] + name[0].upper() + "]" + "\\D*" + ")" \
                 + "(" + portNumber + ")"
         return geneP
-    #TODO:错误处理
     else:
         return ""

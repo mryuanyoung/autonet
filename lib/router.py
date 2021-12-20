@@ -134,14 +134,12 @@ class Router:
         # 需要新加入的端口
         wait4Add = [port for port in ports if not self.portInSelfPorts(port)]
 
+
         # 需要重新配置的端口
         wait4Config = [port for port in ports if self.portInSelfPorts(port) and port not in oldPorts]
 
-        wait4ConfigPorts = list(map(lambda x: portRegexMap[getPortRegexFromName(x['name'])], wait4Config))
+        wait4ConfigPorts = list(map(lambda x: portRegexMap[str(self.getID())+getPortRegexFromName(x['name'])], wait4Config))
 
-        # 需要删除配置的端口
-        wait4Delete = [port for port in self.__ports.values() if
-                       port.toJsonFile() not in ports and port not in wait4ConfigPorts]
 
         # 新加入端口
         for portConf in wait4Add:
@@ -153,15 +151,10 @@ class Router:
         # 配置已有的端口
         for i in range(len(wait4ConfigPorts)):
             wait4ConfigPorts[i].changePort(wait4Config[i])
+            print(wait4ConfigPorts[i].getID())
+            self.__ports[wait4ConfigPorts[i].getID()] = wait4ConfigPorts[i]
             if self.__isActivate:
-                self.__ports[wait4ConfigPorts[i].getID()] = wait4ConfigPorts[i]
-            wait4ConfigPorts[i].activate()
-
-        # 删除不再使用的端口配置
-        # for port in wait4Delete:
-        #     port.deActivate()
-        #     self.__ports.pop(port.getID())
-
+                wait4ConfigPorts[i].activate()
         # 同步conf文件
         self.__conf['ports'] = ports
 
@@ -210,7 +203,7 @@ class Router:
     def addPort(self, port):
         self.__ports[port.getID()] = port
         portIDMap[port.getID()] = port
-        portRegexMap[port.getRegex()] = port
+        portRegexMap[str(self.getID())+port.getRegex()] = port
 
     def getID(self):
         return self.__id

@@ -12,6 +12,13 @@ class Toplogies:
         # 当前生效的拓扑图
         self.__currentActiveTop = None
 
+    def __getRouterFromID__(self, routerId):
+        routerId = int(routerId)
+        if routerId not in routerIDMap.keys():
+            return None
+        router = routerIDMap[routerId]
+        return router
+
     # 决定当前应该生效的top
     def decideActiveTop(self, toplogyId):
         if self.__currentActiveTop:
@@ -46,10 +53,9 @@ class Toplogies:
 
     # 获取路由器信息
     def getRouter(self, routerId, **kwargs):
-        routerId = int(routerId)
-        if routerId not in routerIDMap.keys():
+        router = self.__getRouterFromID__(routerId)
+        if not router:
             return FAILURE_INFO
-        router = routerIDMap[routerId]
         if 'file' in kwargs:
             SUCCESS_INFO['data'] = router.toJsonFile()
         elif 'ospf' in kwargs:
@@ -62,10 +68,9 @@ class Toplogies:
 
 
     def changeRouterSetting(self, routerId, **kwargs):
-        routerId = int(routerId)
-        if routerId not in routerIDMap.keys():
+        router = self.__getRouterFromID__(routerId)
+        if not router:
             return FAILURE_INFO
-        router = routerIDMap[routerId]
         if router.isActivate():
             router.enterConfigMode()
         if 'name' in kwargs:
@@ -95,10 +100,9 @@ class Toplogies:
         toplogy = getObejectFromMap(topId, topIDMap)
         if not toplogy or not toplogy.isActivate():
             return FAILURE_INFO
-        routerId = int(routerId)
-        if routerId not in routerIDMap.keys():
+        router = self.__getRouterFromID__(routerId)
+        if not router:
             return FAILURE_INFO
-        router = routerIDMap[routerId]
         router.login()
         results = []
         for case in test:
