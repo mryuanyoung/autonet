@@ -156,7 +156,7 @@ class Router:
             if self.__isActivate:
                 wait4ConfigPorts[i].activate()
         # 同步conf文件
-        self.__conf['ports'] = ports
+        self.__conf['ports'] = list(map(lambda p: p.toJsonFile(), self.__ports.values()))
 
 
 
