@@ -16,8 +16,8 @@ const { Sider, Content } = Layout;
 function App() {
 
   const [state, setState] = useState<Pick<Context, 'deviceId' | 'fresh' | 'topologyId'>>({
-    deviceId: -1,
-    topologyId: -1,
+    deviceId: 3,
+    topologyId: 1,
     fresh: false
   });
 
@@ -34,11 +34,11 @@ function App() {
     >
       <Layout style={{ height: '100vh' }}>
         <Sider width={200} collapsible collapsedWidth={0} zeroWidthTriggerStyle={{ top: 0 }} >
-          <TopologyMenu/>
+
         </Sider>
         <Layout style={{display: 'flex', flexDirection: 'row'}}>
           <Layout style={{width: '40vw'}}>
-            <Content><Canvas /></Content>
+            <Content></Content>
           </Layout>
           <Layout style={{height: '100vh'}}>
             <Content style={{height: '50vh'}}><AttributionBox /></Content>

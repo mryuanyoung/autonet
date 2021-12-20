@@ -63,9 +63,11 @@ export interface RealConfig {
   area: number,
 }
 
+export type StaticConfig = Omit<RealConfig, 'area'>
+
 export interface OSPFConfig {
   processId: number,
-  networks: Array<Omit<RealConfig, 'passBy'>>
+  network: Array<Omit<RealConfig, 'passBy'>>
 }
 
 export function getRouterInfo(topologyId: number, routerId: number): Promise<Response<Router>> {
@@ -73,13 +75,21 @@ export function getRouterInfo(topologyId: number, routerId: number): Promise<Res
 }
 
 export function updatePort(topologyId: number, routerId: number, data: Array<Partial<Port>>) {
-  return Axios.post(`/toplogy/${topologyId}/router/${routerId}/ports`, data)
+  return Axios.post(`/toplogy/${topologyId}/updateRouter/${routerId}/ports`, {ports: data})
 }
 
-export function configStaticRoute(topologyId: number, routerId: number, data: Array<Omit<RealConfig, 'area'>>) {
-  return Axios.post(`/toplogy/${topologyId}/router/${routerId}/static`, { staticRoute: data })
+export function configStaticRoute(topologyId: number, routerId: number, data: Array<Omit<RealConfig, 'area'>>): Promise<Response<any>> {
+  return Axios.post(`/toplogy/${topologyId}/updateRouter/${routerId}/static`, { staticRoute: data })
 }
 
-export function configOSPFRoute(topologyId: number, routerId: number, data: Array<OSPFConfig>) {
-  return Axios.post(`/toplogy/${topologyId}/router/${routerId}/ospf`, { ospf: { processId: 1, isUp: true, network: data } })
+export function configOSPFRoute(topologyId: number, routerId: number, data: Array<OSPFConfig>): Promise<Response<any>> {
+  return Axios.post(`/toplogy/${topologyId}/updateRouter/${routerId}/ospf`, { ospf: [{ processId: 1, isUp: true, network: data }] })
+}
+
+export function getStaticRoute(topologyId: number, routerId: number): Promise<Response<Array<StaticConfig>>>{
+  return Axios.get(`/toplogy/${topologyId}/router/${routerId}/static`);
+}
+
+export function getOSPFRoute(topologyId: number, routerId: number): Promise<Response<Array<OSPFConfig>>>{
+  return Axios.get(`/toplogy/${topologyId}/router/${routerId}/ospf`);
 }
