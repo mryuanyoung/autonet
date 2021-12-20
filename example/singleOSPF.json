@@ -20,6 +20,7 @@
                     "isUp": true
                 }
             ],
+            "staticRoute": [],
             "ospf": [
                 {
                     "processId": 100,
@@ -64,6 +65,7 @@
                     "isUp": true
                 }
             ],
+            "staticRoute": [],
             "ospf": [
                 {
                     "processId": 100,
@@ -107,6 +109,7 @@
                     "isUp": true
                 }
             ],
+            "staticRoute": [],
             "ospf": [
                 {
                     "processId": 100,

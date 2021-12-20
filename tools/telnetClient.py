@@ -103,8 +103,8 @@ class TelnetClient:
 
 
 telnetClient = TelnetClient()
-telnetClient.login(SWITCH_IP, SWITCH_TELNET_PASSWORD)
-telnetClient.enable(SWITCH_PASSWORD)
+# telnetClient.login(SWITCH_IP, SWITCH_TELNET_PASSWORD)
+# telnetClient.enable(SWITCH_PASSWORD)
 # telnetClient.conf()
 # telnetClient.change_name("switch")
 # tc.logout()

@@ -9,8 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
-    "http://api.zwnsyw.com",
-    "https://api.zwnsyw.com",
+    # "http://api.zwnsyw.com",
+    # "https://api.zwnsyw.com",
     "http://localhost",
     "http://localhost:8000",
     "http://localhost:3000"
@@ -62,7 +62,7 @@ async def getRouter(id, routerId):
 # 查看路由器配置文件
 @app.get("/toplogy/{id}/router/{routerId}/file")
 async def getRouterFile(id, routerId):
-    return toplogies.getRouterFile(routerId)
+    return toplogies.getRouter(routerId, file='')
 
 
 class ModelName(str, Enum):
@@ -175,6 +175,17 @@ async def changeRouterOSPF(id, routerId, ospf: OSPF):
 @app.get("/toplogy/{id}/select")
 async def activateRouter(id):
     return toplogies.decideActiveTop(id)
+
+
+# 查看OSPF
+@app.get("/toplogy/{id}/router/{routerId}/ospf")
+async def getRouterOSPF(id, routerId):
+    return toplogies.getRouter(routerId, ospf='')
+
+# 查看静态路由
+@app.get("/toplogy/{id}/router/{routerId}/static")
+async def getRouterStatic(id, routerId):
+    return toplogies.getRouter(routerId, static='')
 
 fake_db = [1, 23, 456]
 

@@ -43,22 +43,22 @@ class Toplogies:
         SUCCESS_INFO['data'] = toplogy.toJsonFile()
         return SUCCESS_INFO
 
-    # 查看路由器信息
-    def getRouter(self, routerId):
+    # 获取路由器信息
+    def getRouter(self, routerId, **kwargs):
         routerId = int(routerId)
         if routerId not in routerIDMap.keys():
             return FAILURE_INFO
         router = routerIDMap[routerId]
-        SUCCESS_INFO['data'] = router.toJson()
+        if 'file' in kwargs:
+            SUCCESS_INFO['data'] = router.toJsonFile()
+        elif 'ospf' in kwargs:
+            SUCCESS_INFO['data'] = router.toJsonFile()['ospf']
+        elif 'static' in kwargs:
+            SUCCESS_INFO['data'] = router.toJsonFile()['staticRoute']
+        else:
+            SUCCESS_INFO['data'] = router.toJson()
         return SUCCESS_INFO
 
-    def getRouterFile(self, routerId):
-        routerId = int(routerId)
-        if routerId not in routerIDMap.keys():
-            return FAILURE_INFO
-        router = routerIDMap[routerId]
-        SUCCESS_INFO['data'] = router.toJsonFile()
-        return SUCCESS_INFO
 
     def changeRouterSetting(self, routerId, **kwargs):
         routerId = int(routerId)
@@ -92,16 +92,16 @@ class Toplogies:
 
 #
 # if __name__ == "__main__":
-# defaultConfFileName = "./example/example.json"
-# defaultConfFile = open(defaultConfFileName, "r")
-# defaultTop = Toplogy(conf=json.load(defaultConfFile))
-# defaultConfFile.close()
-
 defaultStaticFileName = "./example/static.json"
 defaultStaticFile = open(defaultStaticFileName, "r")
 defaultStatic = Toplogy(conf=json.load(defaultStaticFile))
 defaultStaticFile.close()
 
+defaultConfFileName = "./example/singleOSPF.json"
+defaultConfFile = open(defaultConfFileName, "r")
+defaultTop = Toplogy(conf=json.load(defaultConfFile))
+defaultConfFile.close()
+
 toplogies = Toplogies()
-# toplogies.addToplogy(defaultTop)
 toplogies.addToplogy(defaultStatic)
+toplogies.addToplogy(defaultTop)
