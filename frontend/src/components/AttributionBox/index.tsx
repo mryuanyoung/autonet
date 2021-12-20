@@ -5,6 +5,7 @@ import { getRouterInfo, updatePort, mockRouter, Router, defaultPortInfo } from '
 import ConfigModal, { ModalProps } from './ConfigModal';
 import style from './index.module.css';
 import './index.css';
+import { configOSPFRoute, configStaticRoute, getOSPFRoute, getStaticRoute, OSPFConfig, StaticConfig } from '@api/attribution';
 
 function AttributionBox() {
 
@@ -16,6 +17,7 @@ function AttributionBox() {
   const [modal, setModal] = useState<ModalProps>({
     visible: false,
     type: 0,
+    initConfig: []
   });
 
   useEffect(() => {
@@ -71,13 +73,37 @@ function AttributionBox() {
     setFresh();
   }
 
+  const handleOpenConfig = async (type: number) => {
+    const api = type === 0 ? getStaticRoute : getOSPFRoute;
+
+    try {
+      const res = await api(topologyId, deviceId);
+      if (res.code !== 0) {
+        return;
+      }
+
+      if (type !== 0) {
+        res.data = (res.data as OSPFConfig[]).reduce((prev, curr) => prev.concat(curr.network as any), []);
+      }
+
+      setModal({
+        visible: true,
+        initConfig: res.data,
+        type
+      })
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
   return config ? (
     <Spin spinning={loading} wrapperClassName={style.warpper}>
       <div id={style.cont} >
         <h1 style={{ fontSize: '1.3rem', margin: '0' }}>{config.name}</h1>
 
-        <Button onClick={() => setModal({ visible: true, type: 0 })}>静态路由</Button>
-        <Button onClick={() => setModal({ visible: true, type: 1 })} style={{ marginLeft: '10px' }}>动态路由</Button>
+        <Button onClick={() => handleOpenConfig(0)}>静态路由</Button>
+        <Button onClick={() => handleOpenConfig(1)} style={{ marginLeft: '10px' }}>动态路由</Button>
         <ConfigModal modal={modal} close={() => setModal((o) => ({ ...o, visible: false }))} />
 
         <Card

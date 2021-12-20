@@ -107,6 +107,13 @@ async def uploadToplogy(file: ToplogyModel):
         return FAILURE_INFO
 
 
+async def file_upload(my_file: UploadFile = File(...)):
+    print("???")
+    temp_file = await my_file.read()
+    file_to_str = str(temp_file, 'utf-8')
+    new_topology = Toplogy(conf=json.loads(file_to_str))
+    print(new_topology)
+    toplogies.addToplogy(new_topology)
 
 # 修改路由器的hostname, 示例url:
 # http://127.0.0.1:8000/toplogy/1/updateRouter/1/hostname?name=test
