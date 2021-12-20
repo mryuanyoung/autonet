@@ -31,7 +31,11 @@ function AttributionBox() {
         setConfig(mockRouter)
       }
     })()
-  }, [topologyId, deviceId, fresh])
+  }, [deviceId, fresh])
+
+  useEffect(() => {
+    setConfig(undefined);
+  }, [topologyId])
 
   useEffect(() => {
     if (!config || !config.ports) {
