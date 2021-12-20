@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const Axios = axios.create({
-  // baseURL: ''
+  baseURL: 'http://localhost:8000'
 })
 
 Axios.interceptors.request.use(function(config){
@@ -10,7 +10,7 @@ Axios.interceptors.request.use(function(config){
   return Promise.reject(error);
 })
 
-axios.interceptors.response.use(function(response){
+Axios.interceptors.response.use(function(response){
   return response.data;
 }, function(error){
   return Promise.reject(error);
