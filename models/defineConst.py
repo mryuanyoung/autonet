@@ -18,3 +18,4 @@ SWITCH_PASSWORD = "CISCO"
 ENTER_CONF = "conf terminal"
 SLEEP_TIME = 0.5
 DEFAULT_PATTERN = r"(\D+)(\S+)"
+DEFAULT_PORTS = ["s0/0/0", "s0/0/1", "f0/0", "f0/1", "lo0", "lo1", "lo2"]

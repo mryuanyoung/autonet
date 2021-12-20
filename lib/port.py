@@ -21,6 +21,12 @@ class Port:
         self.__isActivate = False
         if 'conf' in kwargs:
             self.changePort(kwargs['conf'])
+        elif 'name' in kwargs:
+            self.__generateReAndName__(kwargs['name'])
+            self.__conf = {"name": self.__name,
+                           "ip": IP_UNDEFINED,
+                           "mask": MASK_UNDEFINED,
+                           "isUp": False}
 
     def __configPort__(self):
         try:

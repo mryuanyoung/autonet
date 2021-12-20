@@ -24,5 +24,11 @@ class Cabel:
                 "r2Id": self.__r2,
                 "port2Name": self.__p2}
 
+    def toJsonFile(self):
+        return {"r1": self.__r1,
+                "p1": self.__p1,
+                "r2": self.__r2,
+                "p2": self.__p2}
+
     def getID(self):
         return self.__id

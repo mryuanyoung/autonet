@@ -1,6 +1,6 @@
 import json
 
-from models.defineConst import IP_UNDEFINED, ROUTER_NAME_PRE, MASK_UNDEFINED, PASSWD_UNDEFINED, SLEEP_TIME
+from models.defineConst import IP_UNDEFINED, ROUTER_NAME_PRE, MASK_UNDEFINED, PASSWD_UNDEFINED, SLEEP_TIME, DEFAULT_PORTS
 from tools.counter import counter
 from tools.functions import option, getPortRegexFromName
 from lib.port import Port
@@ -18,24 +18,34 @@ class Router:
 
     def __init__(self, **kwargs):
         self.__id = counter.generateRouterID()
-        self.__conf = ""
+        self.__conf = dict()
         self.__ip = IP_UNDEFINED
         self.__mask = MASK_UNDEFINED
         self.__name = ROUTER_NAME_PRE + str(self.__id)
         self.__passwd = PASSWD_UNDEFINED
         self.__ports = dict()
+        for portName in DEFAULT_PORTS:
+            port = Port(name=portName)
+            self.addPort(port)
         self.__isActivate = False
         if 'conf' in kwargs:
             self.__initByFile__(kwargs['conf'])
 
     def __initByFile__(self, conf):
-        self.__conf = option(self.__conf, conf)
+        # self.__conf = option(self.__conf, conf)
         self.__ip = option(self.__ip, conf['ip'])
         self.__mask = option(self.__mask, conf['mask'])
         self.__passwd = option(self.__passwd, conf['password'])
         self.config(conf)
         # 配置端口
         self.configPort(conf['ports'])
+        self.__conf = {"name": self.__name,
+                       "ip": self.__ip,
+                       "mask": self.__mask,
+                       "password": self.__passwd,
+                       "ports": list(map(lambda p: p.toJsonFile(), self.__ports.values())),
+                       "staticRoute": conf['staticRoute'],
+                       "ospf": conf["ospf"]}
 
     def config(self, conf):
         # 进入配置模式
@@ -131,9 +141,9 @@ class Router:
             wait4ConfigPorts[i].activate()
 
         # 删除不再使用的端口配置
-        for port in wait4Delete:
-            port.deActivate()
-            self.__ports.pop(port.getID())
+        # for port in wait4Delete:
+        #     port.deActivate()
+        #     self.__ports.pop(port.getID())
 
         # 同步conf文件
         self.__conf['ports'] = ports
