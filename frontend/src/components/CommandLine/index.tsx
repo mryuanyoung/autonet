@@ -1,13 +1,14 @@
 import { useAppContext } from '@hooks/AppContext';
 import { sendCommandLine } from '@api/command';
 import style from './index.module.css';
-import { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useContext } from 'react';
 import { Input, Button } from 'antd';
+import {ContCtx} from '../../App';
 
 function CommandLine() {
+  const {content, setContent} = useContext(ContCtx);
   const ref = useRef<HTMLDivElement>(null);
   const { deviceId } = useAppContext();
-  const [content, setContent] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -43,7 +44,8 @@ function CommandLine() {
           suffix={<Button type='link' size='small' onClick={() => setContent('')}>清屏</Button>}
           onChange={e => setInputValue(e.target.value)}
           onPressEnter={handleEnter}
-          disabled={loading}
+          // disabled={loading}
+          disabled
           value={inputValue}
         />
       </div>
