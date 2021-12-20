@@ -20,11 +20,13 @@ class Toplogy:
 
     def __initByFile__(self, conf):
         self.__name = option(self.__name, conf['name'])
+        minRouterId = float('inf')
         for routerConf in conf['routers']:
             router = Router(conf=routerConf)
+            minRouterId = min(minRouterId, router.getID())
             self.addRouter(router)
         for cabelConf in conf['cabels']:
-            cabel = Cabel(conf=cabelConf)
+            cabel = Cabel(conf=cabelConf, minId=minRouterId)
             self.addCabel(cabel)
         self.__conf = {"name": self.__name,
                        "routers": list(map(lambda r: r.toJsonFile(), self.__routers)),

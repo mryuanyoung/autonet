@@ -8,13 +8,13 @@ class Cabel:
         self.__p1 = NAME_UNDEFINED
         self.__r2 = ID_UNDEFINED
         self.__p2 = NAME_UNDEFINED
-        if 'conf' in kwargs:
-            self.__initByFile__(kwargs['conf'])
+        if 'conf' in kwargs and 'minId' in kwargs:
+            self.__initByFile__(kwargs['conf'], kwargs['minId'])
 
-    def __initByFile__(self, conf):
-        self.__r1 = option(self.__r1, conf['r1'])
+    def __initByFile__(self, conf, minId):
+        self.__r1 = option(self.__r1, conf['r1'] + minId - 1)
         self.__p1 = option(self.__p1, conf['p1'])
-        self.__r2 = option(self.__r2, conf['r2'])
+        self.__r2 = option(self.__r2, conf['r2'] + minId - 1)
         self.__p2 = option(self.__p2, conf['p2'])
 
     def toSimpleJson(self):
