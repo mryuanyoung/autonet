@@ -64,6 +64,9 @@ class Toplogy:
     def toJsonFile(self):
         return self.__conf
 
+    def isActivate(self):
+        return self.__isActivate
+
     #激活拓扑图
     def activate(self):
         self.__isActivate = True

@@ -91,6 +91,24 @@ class Toplogies:
                 }
         return SUCCESS_INFO
 
+    def executeTest(self, topId, routerId, test):
+        toplogy = getObejectFromMap(topId, topIDMap)
+        if not toplogy or not toplogy.isActivate():
+            return FAILURE_INFO
+        routerId = int(routerId)
+        if routerId not in routerIDMap.keys():
+            return FAILURE_INFO
+        router = routerIDMap[routerId]
+        router.login()
+        results = []
+        for case in test:
+            res = router.executeTest(case['input'], case['output'])
+            results.append(res)
+        SUCCESS_INFO['data'] = results
+        return SUCCESS_INFO
+
+
+
 #
 # if __name__ == "__main__":
 defaultStaticFileName = "./example/static.json"

@@ -3,7 +3,7 @@ from fastapi import FastAPI, UploadFile, File, Body
 from enum import Enum
 from toplogies import toplogies
 from lib.toplogy import Toplogy
-from models.models import Ports, StaticRoutes, OSPF, ToplogyModel
+from models.models import Ports, StaticRoutes, OSPF, ToplogyModel, TestFileModel
 from models.defineConst import FAILURE_INFO
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -188,6 +188,10 @@ async def changeRouterOSPF(id, routerId, ospf: OSPF):
 async def activateRouter(id):
     return toplogies.decideActiveTop(id)
 
+# 上传测试文件并测试
+@app.post("/toplogy/{id}/router/{routerId}/upload")
+async def uploadTestFile(id, routerId, test: TestFileModel):
+    return toplogies.executeTest(id, routerId, test.test)
 
 # 查看OSPF
 @app.get("/toplogy/{id}/router/{routerId}/ospf")

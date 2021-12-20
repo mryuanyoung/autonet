@@ -12,3 +12,6 @@ class ToplogyModel(BaseModel):
     name: str
     routers: list
     cabels: list
+
+class TestFileModel(BaseModel):
+    test: list

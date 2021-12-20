@@ -82,12 +82,29 @@ class Router:
                 logging.info("退出路由器失败." + self._get_msg_())
                 # print("连接失败")
 
-    def enterConfigMode(self):
+    def login(self):
         if self.__isActivate:
             try:
                 telnetClient.login_router(self.__ip, self.__passwd)
                 telnetClient.enable(self.__passwd)
                 telnetClient.set_terminal_length()
+            except:
+                logging.info("login失败." + self._get_msg_())
+
+    # activate的情况下可调用
+    def executeTest(self, command, output):
+        try:
+            realOutput = telnetClient.exec_cmd(command)
+        except:
+            realOutput = "执行失败." + self._get_msg_()
+            logging.info(realOutput)
+        return {"output": realOutput, "isEqual": realOutput == output}
+
+
+    def enterConfigMode(self):
+        if self.__isActivate:
+            try:
+                self.login()
                 telnetClient.conf()
             except:
                 logging.info("进入config模式失败." + self._get_msg_())
