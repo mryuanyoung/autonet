@@ -7,3 +7,8 @@ class StaticRoutes(BaseModel):
 
 class OSPF(BaseModel):
     ospf: list
+
+class ToplogyModel(BaseModel):
+    name: str
+    routers: list
+    cabels: list

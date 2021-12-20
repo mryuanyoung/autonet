@@ -3,7 +3,8 @@ from fastapi import FastAPI, UploadFile, File, Body
 from enum import Enum
 from toplogies import toplogies
 from lib.toplogy import Toplogy
-from models.models import Ports, StaticRoutes, OSPF
+from models.models import Ports, StaticRoutes, OSPF, ToplogyModel
+from models.defineConst import FAILURE_INFO
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -87,14 +88,25 @@ async def read_file(file_path: str):
     return {"file_path": file_path}
 
 
-# 通过上传配置文件，进行配置
+# # 通过上传配置文件，进行配置
+# @app.post("/toplogy/upload")
+# async def file_upload(my_file: UploadFile = File(...)):
+#     temp_file = await my_file.read()
+#     file_to_str = str(temp_file, 'utf-8')
+#     new_topology = Toplogy(conf=json.loads(file_to_str))
+#     print(new_topology)
+#     toplogies.addToplogy(new_topology)
+
+# 通过上传配置文件的JSON字符串，进行配置
 @app.post("/toplogy/upload")
-async def file_upload(my_file: UploadFile = File(...)):
-    temp_file = await my_file.read()
-    file_to_str = str(temp_file, 'utf-8')
-    new_topology = Toplogy(conf=json.loads(file_to_str))
-    print(new_topology)
-    toplogies.addToplogy(new_topology)
+async def uploadToplogy(file: ToplogyModel):
+    try:
+        newToplogy = Toplogy(conf={"name": file.name, "routers": file.routers, "cabels": file.cabels})
+        return toplogies.addToplogy(newToplogy)
+    except:
+        return FAILURE_INFO
+
+
 
 # 修改路由器的hostname, 示例url:
 # http://127.0.0.1:8000/toplogy/1/updateRouter/1/hostname?name=test

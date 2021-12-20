@@ -26,6 +26,7 @@ class Toplogies:
     def addToplogy(self, toplogy):
         topIDMap[toplogy.getID()] = toplogy
         self.__toplogies.append(toplogy)
+        return SUCCESS_INFO
 
     # 查看拓扑信息
     def getToplogy(self, topId):
