@@ -37,12 +37,14 @@ class Port:
 
     #激活的同时，进行配置
     def activate(self):
-        self.__isActivate = True
-        self.__configPort__()
+        if self.__ip!=IP_UNDEFINED:
+            self.__isActivate = True
+            self.__configPort__()
 
     def deActivate(self):
         self.deleteConf()
         self.__isActivate = False
+
 
     def deleteConf(self):
         if self.__isActivate:
@@ -75,8 +77,6 @@ class Port:
         self.__ip = option(self.__ip, conf['ip'])
         self.__mask = option(self.__mask, conf['mask'])
         self.__isUp = option(self.__ip, conf["isUp"])
-        if self.__isActivate:
-            self.__configPort__()
 
 
 

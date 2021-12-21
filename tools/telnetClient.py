@@ -11,7 +11,7 @@ class TelnetClient:
 
     def get_output(self, sleep_seconds=2):
         time.sleep(sleep_seconds)
-        return self.tn.read_very_eager().decode('ascii')
+        return self.tn.read_veryf_eager().decode('ascii')
 
     def login_router(self, host_ip, password):
         telnetClient.exec_cmd("telnet " + host_ip)
@@ -34,9 +34,9 @@ class TelnetClient:
         telnetClient.exec_cmd("no ip route " + ip + " " + mask + " " + pass_by)
 
     def config_ospf(self, process_id, networks):
-        telnetClient.exec_cmd("router ospf " + process_id)
+        telnetClient.exec_cmd("router ospf " + str(process_id))
         for network in networks:
-            telnetClient.exec_cmd("network " + network['ip'] + network['mask'] + " area " + str(network['area']))
+            telnetClient.exec_cmd("network " + network['ip'] + " " + network['mask'] + " area " + str(network['area']))
 
     def delete_ospf(self, process_id):
         telnetClient.exec_cmd("no router ospf "+str(process_id))
@@ -103,8 +103,8 @@ class TelnetClient:
 
 
 telnetClient = TelnetClient()
-# telnetClient.login(SWITCH_IP, SWITCH_TELNET_PASSWORD)
-# telnetClient.enable(SWITCH_PASSWORD)
+telnetClient.login(SWITCH_IP, SWITCH_TELNET_PASSWORD)
+telnetClient.enable(SWITCH_PASSWORD)
 # telnetClient.conf()
 # telnetClient.change_name("switch")
 # tc.logout()

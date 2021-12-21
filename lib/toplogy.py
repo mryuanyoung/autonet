@@ -79,4 +79,3 @@ class Toplogy:
         for router in self.__routers:
             router.enterConfigMode()
             router.deActivate()
-            router.exit()

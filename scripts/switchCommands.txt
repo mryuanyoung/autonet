@@ -1,8 +1,6 @@
-int f0/1
-no switchport
-ip address 192.168.4.1 255.255.255.0
-no shut
-exit
+enable
+CISCO
+conf terminal
 int f0/13
 no switchport
 ip address 192.168.1.2 255.255.255.0

@@ -67,12 +67,16 @@ class Router:
             port.activate()
         self.config(self.__conf)
         self.exit()
+        sleep(SLEEP_TIME)
 
     def deActivate(self):
         self.deleteConf()
-        self.__isActivate = False
         for port in self.__ports.values():
             port.deActivate()
+        self.exit()
+        self.__isActivate = False
+        sleep(SLEEP_TIME)
+
 
     def exit(self):
         if self.__isActivate:
@@ -151,7 +155,6 @@ class Router:
         # 配置已有的端口
         for i in range(len(wait4ConfigPorts)):
             wait4ConfigPorts[i].changePort(wait4Config[i])
-            print(wait4ConfigPorts[i].getID())
             self.__ports[wait4ConfigPorts[i].getID()] = wait4ConfigPorts[i]
             if self.__isActivate:
                 wait4ConfigPorts[i].activate()
@@ -178,12 +181,12 @@ class Router:
     def configOSPF(self, ospf):
         if self.__isActivate:
             try:
-                processIds = list(set(map(lambda x: x['processId']), ospf))
+                processIds = list(set(map(lambda x: x['processId'], ospf)))
                 for processId in processIds:
                     telnetClient.delete_ospf(processId)
                 for ospfConf in ospf:
                     telnetClient.config_ospf(ospfConf['processId'], ospfConf['networks'])
-            except:
+            except Exception as ex:
                 logging.info('配置ospf失败.' + self._get_msg_() + 'ospf: ' + str(ospf))
         self.__conf['ospf'] = ospf
 
