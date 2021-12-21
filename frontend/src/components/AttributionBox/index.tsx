@@ -1,15 +1,18 @@
 import { useAppContext } from '@hooks/AppContext';
-import { useEffect, useState } from 'react';
-import { Card, Empty, Form, Tag, Input, Button, Spin, Modal } from 'antd';
-import { getRouterInfo, updatePort, mockRouter, Router, defaultPortInfo } from '@api/attribution';
+import { useContext, useEffect, useState } from 'react';
+import { Card, Empty, Form, Tag, Input, Button, Spin, Modal, Upload, message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons'
+import { getRouterInfo, updatePort, mockRouter, Router, defaultPortInfo, uploadTestFile } from '@api/attribution';
 import ConfigModal, { ModalProps } from './ConfigModal';
 import style from './index.module.css';
 import './index.css';
 import { configOSPFRoute, configStaticRoute, getOSPFRoute, getStaticRoute, OSPFConfig, StaticConfig } from '@api/attribution';
+import {ContCtx} from '../../App';
 
 function AttributionBox() {
 
   const { fresh, topologyId, deviceId, setFresh } = useAppContext();
+  const {content, setContent} = useContext(ContCtx);
   const [config, setConfig] = useState<Router>();
   const [active, setActive] = useState('0');
   const [formData, setFormData] = useState(defaultPortInfo);
@@ -19,6 +22,7 @@ function AttributionBox() {
     type: 0,
     initConfig: []
   });
+  const [testFile, setTestFile] = useState();
 
   useEffect(() => {
     // if (topologyId === -1 || deviceId === -1) {
@@ -97,6 +101,30 @@ function AttributionBox() {
     }
   }
 
+  const beforeUpload = (file: any) => {
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = async(e: any)=> {
+      try{
+        const json = JSON.parse(e.target.result);
+        const res = await uploadTestFile(topologyId, deviceId, json);
+
+        if(res.code !== 0){
+          message.error('测试失败');
+          setContent('sijfhwif94h9gfwf49b4ncn49ht294oqfnw ob934394g29bb');
+        }
+        else{
+          message.success('测试成功');
+          setContent(JSON.stringify(res.data));
+        }
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
+    return false;
+  }
+
   return config ? (
     <Spin spinning={loading} wrapperClassName={style.warpper}>
       <div id={style.cont} >
@@ -104,6 +132,9 @@ function AttributionBox() {
 
         <Button onClick={() => handleOpenConfig(0)}>静态路由</Button>
         <Button onClick={() => handleOpenConfig(1)} style={{ marginLeft: '10px' }}>动态路由</Button>
+        <Upload fileList={testFile} showUploadList={false} beforeUpload={beforeUpload}>
+          <Button style={{ marginLeft: '10px' }} icon={<UploadOutlined />}>测试文件</Button>
+        </Upload>
         <ConfigModal modal={modal} close={() => setModal((o) => ({ ...o, visible: false }))} />
 
         <Card

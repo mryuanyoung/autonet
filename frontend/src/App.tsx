@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { AppContext, Context } from '@hooks/AppContext';
 import Canvas from '@components/Canvas';
@@ -13,6 +13,8 @@ import * as React from "react";
 
 const { Sider, Content } = Layout;
 
+export const ContCtx = React.createContext<{ content: string, setContent: React.Dispatch<React.SetStateAction<string>> }>({ content: '', setContent: () => { } });
+
 function App() {
 
   const [state, setState] = useState<Pick<Context, 'deviceId' | 'fresh' | 'topologyId'>>({
@@ -20,6 +22,8 @@ function App() {
     topologyId: 1,
     fresh: false
   });
+
+  const [content, setContent] = useState('');
 
   return (
     <AppContext.Provider
@@ -34,16 +38,18 @@ function App() {
     >
       <Layout style={{ height: '100vh' }}>
         <Sider width={200} collapsible collapsedWidth={0} zeroWidthTriggerStyle={{ top: 0 }} >
-          <TopologyMenu/>
+          <TopologyMenu />
         </Sider>
-        <Layout style={{display: 'flex', flexDirection: 'row'}}>
-          <Layout style={{width: '40vw'}}>
-            <Content><Canvas/></Content>
+        <Layout style={{ display: 'flex', flexDirection: 'row' }}>
+          <Layout style={{ width: '40vw' }}>
+            <Content><Canvas /></Content>
           </Layout>
-          <Layout style={{height: '100vh'}}>
-            <Content style={{height: '50vh'}}><AttributionBox /></Content>
-            <Content style={{height: '50vh'}}><CommandLine /></Content>
-          </Layout>
+          <ContCtx.Provider value={{ content, setContent }}>
+            <Layout style={{ height: '100vh' }}>
+              <Content style={{ height: '50vh' }}><AttributionBox /></Content>
+              <Content style={{ height: '50vh' }}><CommandLine /></Content>
+            </Layout>
+          </ContCtx.Provider>
         </Layout>
       </Layout>
     </AppContext.Provider>
