@@ -11,7 +11,7 @@ class TelnetClient:
 
     def get_output(self, sleep_seconds=2):
         time.sleep(sleep_seconds)
-        return self.tn.read_veryf_eager().decode('ascii')
+        return self.tn.read_very_eager().decode('ascii')
 
     def login_router(self, host_ip, password):
         telnetClient.exec_cmd("telnet " + host_ip)
