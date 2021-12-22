@@ -1,6 +1,7 @@
 import telnetlib
 import time
-from models.defineConst import SWITCH_PASSWORD, SWITCH_TELNET_PASSWORD, SWITCH_IP, ENABLE_ROOT
+from models.defineConst import SWITCH_PASSWORD, SWITCH_TELNET_PASSWORD, SWITCH_IP, ENABLE_ROOT, SLEEP_TIME
+
 
 class TelnetClient:
     def __init__(self):
@@ -9,7 +10,7 @@ class TelnetClient:
     def input(self, cmd):
         self.tn.write(cmd.encode('ascii') + b'\n')
 
-    def get_output(self, sleep_seconds=2):
+    def get_output(self, sleep_seconds=SLEEP_TIME):
         time.sleep(sleep_seconds)
         return self.tn.read_very_eager().decode('ascii')
 

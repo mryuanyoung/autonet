@@ -109,6 +109,7 @@ class Toplogies:
             res = router.executeTest(case['input'], case['output'])
             results.append(res)
         SUCCESS_INFO['data'] = results
+        router.exitTest()
         return SUCCESS_INFO
 
 

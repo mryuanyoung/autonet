@@ -1,6 +1,7 @@
 import json
 
-from models.defineConst import IP_UNDEFINED, ROUTER_NAME_PRE, MASK_UNDEFINED, PASSWD_UNDEFINED, SLEEP_TIME, DEFAULT_PORTS
+from models.defineConst import IP_UNDEFINED, ROUTER_NAME_PRE, MASK_UNDEFINED, PASSWD_UNDEFINED, SLEEP_TIME, \
+    DEFAULT_PORTS, TEST_SLEEP_TIME
 from tools.counter import counter
 from tools.functions import option, getPortRegexFromName
 from lib.port import Port
@@ -85,6 +86,13 @@ class Router:
             except:
                 logging.info("退出路由器失败." + self._get_msg_())
                 # print("连接失败")
+    def exitTest(self):
+        if self.__isActivate:
+            try:
+                telnetClient.logout()
+                telnetClient.logout()
+            except:
+                logging.info("退出路由器失败." + self._get_msg_())
 
     def login(self):
         if self.__isActivate:
@@ -99,10 +107,13 @@ class Router:
     def executeTest(self, command, output):
         try:
             realOutput = telnetClient.exec_cmd(command)
+            sleep(TEST_SLEEP_TIME)
         except:
             realOutput = "执行失败." + self._get_msg_()
             logging.info(realOutput)
         return {"output": realOutput, "isEqual": realOutput == output}
+
+
 
 
     def enterConfigMode(self):
