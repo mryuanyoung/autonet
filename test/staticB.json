@@ -1,0 +1,15 @@
+{
+    "test": [
+    {
+        "input": "show ip route",
+        "output": "Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2\n       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, * - candidate default, U - per-user static route\n       o - ODR, P - periodic downloaded static route\nGateway of last resort is not set\nC\nS C\nS C\n192.168.12.0/24 is directly connected, Serial0/0/0\n1.0.0.0/24 is subnetted, 1 subnets\n1.1.1.0 is directly connected, Serial0/0/0\n2.0.0.0/24 is subnetted, 1 subnets\n   2.2.2.0 is directly connected, Loopback0\n3.0.0.0/24 is subnetted, 1 subnets\n3.3.3.0 is directly connected, Serial0/0/1\n192.168.23.0/24 is directly connected, Serial0/0/1"
+    },
+    {
+        "input": "ping 1.1.1.1 source loopback 0",
+        "output": "Protocol [ip]:\nTarget IP address: 2.2.2.2\nRepeat count [5]:\nDatagram size [100]:\nTimeout in seconds [2]:\nExtended commands [n]: y\nSource address or interface: 1.1.1.1\nType of service [0]:\nSet DF bit in IP header? [no]:\nValidate reply data? [no]:\nData pattern [0xABCD]:\nLoose, Strict, Record, Timestamp, Verbose[none]:\nSweep range of sizes [n]:\nType escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 2.2.2.2, timeout is 2 seconds:\nPacket sent with a source address of 1.1.1.1"
+    },
+    {
+        "input": "ping 3.3.3.3 source loopback 0",
+        "output": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 2.2.2.2, timeout is 2 seconds:\nPacket sent with a source address of 1.1.1.1\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 12/14/16 ms"
+    }]
+}
