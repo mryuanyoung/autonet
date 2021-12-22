@@ -113,18 +113,26 @@ class Toplogies:
 
 
 
-#
-# if __name__ == "__main__":
+# 静态路由
 defaultStaticFileName = "./example/static.json"
 defaultStaticFile = open(defaultStaticFileName, "r")
 defaultStatic = Toplogy(conf=json.load(defaultStaticFile))
 defaultStaticFile.close()
 
-defaultConfFileName = "./example/singleOSPF.json"
-defaultConfFile = open(defaultConfFileName, "r")
-defaultTop = Toplogy(conf=json.load(defaultConfFile))
-defaultConfFile.close()
+# 单域OSPF
+defaultSingleOSPFFileName = "./example/singleOSPF.json"
+defaultSingleOSPFFile = open(defaultSingleOSPFFileName, "r")
+defaultSingleOSPF = Toplogy(conf=json.load(defaultSingleOSPFFile))
+defaultSingleOSPFFile.close()
 
+# 多域OSPF
+defaultMultipleOSPFFileName = "./example/multipleOSPF.json"
+defaultMultipleOSPFFile = open(defaultMultipleOSPFFileName, "r")
+defaultMultipleOSPF = Toplogy(conf=json.load(defaultMultipleOSPFFile))
+defaultMultipleOSPFFile.close()
+
+# 添加默认拓扑
 toplogies = Toplogies()
 toplogies.addToplogy(defaultStatic)
-toplogies.addToplogy(defaultTop)
+toplogies.addToplogy(defaultSingleOSPF)
+toplogies.addToplogy(defaultMultipleOSPF)
