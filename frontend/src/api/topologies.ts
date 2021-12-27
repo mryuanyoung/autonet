@@ -7,3 +7,7 @@ export function getToplogies() {
 export function uploadFile(file:JSON) {
   return Axios.post(`/toplogy/upload`, file)
 }
+
+export function activate(id: number){
+  return Axios.get(`/toplogy/${id}/select`);
+}

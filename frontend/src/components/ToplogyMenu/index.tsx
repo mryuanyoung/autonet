@@ -1,10 +1,10 @@
 import { useAppContext } from '@hooks/AppContext';
-import { getToplogies,uploadFile } from '@api/topologies';
+import { activate, getToplogies,uploadFile } from '@api/topologies';
 import * as go from 'gojs';
 import { ReactDiagram } from 'gojs-react';
 import {useEffect, useState} from "react";
 import * as React from "react";
-import { Menu} from 'antd';
+import { Menu, Button} from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import './index.css';
 
@@ -79,6 +79,7 @@ function TopologyMenu() {
       })}
     </Menu>
     <input id="upload_button" type="file" placeholder="请选择文件上传" onChange={handleUpload}/>
+    <Button onClick={() => activate(topologyId)}>激活</Button>
   </div>);
 }
 
