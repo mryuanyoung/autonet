@@ -79,15 +79,14 @@ function AttributionBox() {
 
   const handleOpenConfig = async (type: number) => {
     const api = type === 0 ? getStaticRoute : getOSPFRoute;
-
-    try {
+        try {
       const res = await api(topologyId, deviceId);
       if (res.code !== 0) {
         return;
       }
 
       if (type !== 0) {
-        res.data = (res.data as OSPFConfig[]).reduce((prev, curr) => prev.concat(curr.network as any), []);
+        res.data = (res.data as OSPFConfig[]).reduce((prev, curr) => prev.concat(curr.networks as any), []);
       }
 
       setModal({

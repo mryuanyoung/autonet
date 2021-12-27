@@ -67,7 +67,7 @@ export type StaticConfig = Omit<RealConfig, 'area'>
 
 export interface OSPFConfig {
   processId: number,
-  network: Array<Omit<RealConfig, 'passBy'>>
+  networks: Array<Omit<RealConfig, 'passBy'>>
 }
 
 export function getRouterInfo(topologyId: number, routerId: number): Promise<Response<Router>> {
