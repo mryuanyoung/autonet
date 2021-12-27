@@ -111,50 +111,50 @@ function AttributionBox() {
     reader.onload = async (e: any) => {
       try {
         setLoading(true);
-        // const json = JSON.parse(e.target.result);
-        // const res = await uploadTestFile(topologyId, deviceId, json);
+        const json = JSON.parse(e.target.result);
+        const res = await uploadTestFile(topologyId, deviceId, json);
 
-        // if (res.code !== 0) {
-        //   message.error('测试失败');
-        // }
+        if (res.code !== 0) {
+          message.error('测试失败');
+        }
 
-        // else {
-          const res = {
-            data: [{
-              "output": "Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP\n       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area\n       * - candidate default, U - per-user static route, o - ODR\n       P - periodic downloaded static route\n\nGateway of last resort is not set\n\n     1.0.0.0/24 is subnetted, 1 subnets\nC       1.1.1.0 is directly connected, Loopback0\n     2.0.0.0/24 is subnetted, 1 subnets\nS       2.2.2.0 is directly connected, Serial2/0\n     3.0.0.0/24 is subnetted, 1 subnets\nS       3.3.3.0 [1/0] via 172.17.0.2\nC    172.16.0.0/16 is directly connected, FastEthernet0/0\nC    172.17.0.0/16 is directly connected, Serial2/0\nS    172.18.0.0/16 [1/0] via 172.17.0.2",
-              "isEqual": true
-            },
-            {
-              "output": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 172.17.0.1, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 48/66/86 ms",
-              "isEqual": true
-            },
-            {
-              "output": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 172.18.0.2, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 65/66/68 ms",
-              "isEqual": true
-            },
-            {
-              "output": "Type escape sequence to abort.\nTracing the route to 3.3.3.0\n\n  1   172.17.0.2      37 msec   48 msec   16 msec   \n  2   172.18.0.2      53 msec   20 msec   69 msec",
-              "isEqual": false
-            },
-            {
-              "output": "Serial2/0 is up, line protocol is up (connected)\n  Hardware is HD64570\n  Internet address is 172.17.0.1/16",
-              "isEqual": true
-            },
-            {
-              "output": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 2.2.2.0, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 17/30/48 ms",
-              "isEqual": true
-            },
-            {
-              "output": "Type escape sequence to abort.\nTracing the route to 3.3.3.0\n\n  1   172.17.0.2      37 msec   48 msec   16 msec   \n  2   172.18.0.2      53 msec   20 msec   69 msec",
-              "isEqual": true
-            }
-            ]
-          };
+        else {
+          // const res = {
+          //   data: [{
+          //     "output": "Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP\n       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area\n       * - candidate default, U - per-user static route, o - ODR\n       P - periodic downloaded static route\n\nGateway of last resort is not set\n\n     1.0.0.0/24 is subnetted, 1 subnets\nC       1.1.1.0 is directly connected, Loopback0\n     2.0.0.0/24 is subnetted, 1 subnets\nS       2.2.2.0 is directly connected, Serial2/0\n     3.0.0.0/24 is subnetted, 1 subnets\nS       3.3.3.0 [1/0] via 172.17.0.2\nC    172.16.0.0/16 is directly connected, FastEthernet0/0\nC    172.17.0.0/16 is directly connected, Serial2/0\nS    172.18.0.0/16 [1/0] via 172.17.0.2",
+          //     "isEqual": true
+          //   },
+          //   {
+          //     "output": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 172.17.0.1, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 48/66/86 ms",
+          //     "isEqual": true
+          //   },
+          //   {
+          //     "output": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 172.18.0.2, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 65/66/68 ms",
+          //     "isEqual": true
+          //   },
+          //   {
+          //     "output": "Type escape sequence to abort.\nTracing the route to 3.3.3.0\n\n  1   172.17.0.2      37 msec   48 msec   16 msec   \n  2   172.18.0.2      53 msec   20 msec   69 msec",
+          //     "isEqual": false
+          //   },
+          //   {
+          //     "output": "Serial2/0 is up, line protocol is up (connected)\n  Hardware is HD64570\n  Internet address is 172.17.0.1/16",
+          //     "isEqual": true
+          //   },
+          //   {
+          //     "output": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 2.2.2.0, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 17/30/48 ms",
+          //     "isEqual": true
+          //   },
+          //   {
+          //     "output": "Type escape sequence to abort.\nTracing the route to 3.3.3.0\n\n  1   172.17.0.2      37 msec   48 msec   16 msec   \n  2   172.18.0.2      53 msec   20 msec   69 msec",
+          //     "isEqual": true
+          //   }
+          //   ]
+          // };
           const failure = res.data.filter(item => !item.isEqual).length !== 0;
           message.success('测试完成, ' + (failure ? '有用例未通过' : '全部通过'), 5);
 
           setContent(res.data.map((item, idx) => ({...item, idx})));
-        // }
+        }
       }
       catch (err) {
         console.log(err);
