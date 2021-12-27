@@ -94,6 +94,6 @@ export function getOSPFRoute(topologyId: number, routerId: number): Promise<Resp
   return Axios.get(`/toplogy/${topologyId}/router/${routerId}/ospf`);
 }
 
-export function uploadTestFile(topologyId: number, routerId: number, file: Object): Promise<Response<any>> {
+export function uploadTestFile(topologyId: number, routerId: number, file: Object): Promise<Response<{output: string, isEqual: boolean}[]>> {
   return Axios.post(`/toplogy/${topologyId}/router/${routerId}/upload`, file)
 }
