@@ -19,6 +19,10 @@
     {
         "input": "ping 192.168.20.2",
         "output": "ping 192.168.20.2\r\n\r\nType escape sequence to abort.\r\nSending 5, 100-byte ICMP Echos to 192.168.20.2, timeout is 2 seconds:\r\n!!!!!\r\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 28/30/32 ms\r\nRTA#"
+    },
+    {
+        "input": "show ip ospf database",
+        "output": "test"
     }
     ]
 }

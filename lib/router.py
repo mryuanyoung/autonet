@@ -76,7 +76,7 @@ class Router:
             port.deActivate()
         self.exit()
         self.__isActivate = False
-        sleep(SLEEP_TIME)
+        sleep(4*SLEEP_TIME)
 
 
     def exit(self):
@@ -188,8 +188,14 @@ class Router:
                 logging.info('配置静态路由失败.' + self._get_msg_() + 'static route: ' + str(staticRoute))
         self.__conf['staticRoute'] = staticRoute
 
+    def __change__area__(self, ospfs):
+        for ospf in ospfs:
+            for network in ospf['networks']:
+                network['area'] = int(network['area'])
+
     # 默认在config模式
     def configOSPF(self, ospf):
+        self.__change__area__(ospf)
         if self.__isActivate:
             try:
                 processIds = list(set(map(lambda x: x['processId'], ospf)))

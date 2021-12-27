@@ -83,7 +83,7 @@ export function configStaticRoute(topologyId: number, routerId: number, data: Ar
 }
 
 export function configOSPFRoute(topologyId: number, routerId: number, data: Array<OSPFConfig>): Promise<Response<any>> {
-  return Axios.post(`/toplogy/${topologyId}/updateRouter/${routerId}/ospf`, { ospf: [{ processId: 1, isUp: true, network: data }] })
+  return Axios.post(`/toplogy/${topologyId}/updateRouter/${routerId}/ospf`, { ospf: [{ processId: 1, isUp: true, networks: data }] })
 }
 
 export function getStaticRoute(topologyId: number, routerId: number): Promise<Response<Array<StaticConfig>>> {
