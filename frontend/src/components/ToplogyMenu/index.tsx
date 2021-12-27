@@ -23,7 +23,7 @@ function TopologyMenu() {
       name: "拓扑三"
     }
   ]);
-  const { topologyId,setTopologyId } = useAppContext();
+  const { topologyId,setTopologyId, setLoading } = useAppContext();
   const [new_upload,setNew_upload]=useState(false);
   useEffect(() => {
     // if (topologyId === -1 || deviceId === -1) {
@@ -31,12 +31,16 @@ function TopologyMenu() {
     // }
     (async function () {
       try {
+        setLoading(true);
         const res = await getToplogies();
         setTopologies(res.data.info);
         setTopologyId(res.data.info[0].id);
         setNew_upload(false);
       }
       catch (err) {
+      }
+      finally{
+        setLoading(false)
       }
     })()
   },[new_upload]);

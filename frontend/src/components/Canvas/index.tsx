@@ -9,7 +9,7 @@ import Router from './Router.png'
 
 
 function Canvas() {
-  const { deviceId,setDeviceId,fresh,setFresh,topologyId } = useAppContext();
+  const { deviceId,setDeviceId,fresh,setFresh,topologyId, setLoading } = useAppContext();
   const [data,setData]=useState({nodes:[],links:[]});
 
   const getNodeInfo=(e: any, obj:any) =>{
@@ -179,6 +179,7 @@ function Canvas() {
     if (!topologyId) return;
     (async function () {
       try {
+        setLoading(true);
         const res = await getTopologyInfo(topologyId);
         console.log(res.data)
         const nodes=res.data.routers.map((value: any)=>{
@@ -217,6 +218,9 @@ function Canvas() {
       }
       catch (err) {
         console.log(err);
+      }
+      finally{
+        setLoading(false)
       }
     })()
   }, [topologyId, deviceId]);

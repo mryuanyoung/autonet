@@ -21,7 +21,7 @@ const Configs = [
 
 const ConfigModal: React.FC<Props> = (props) => {
 
-  const { topologyId, deviceId } = useAppContext();
+  const { topologyId, deviceId, setLoading } = useAppContext();
 
   const { modal, close } = props;
 
@@ -33,6 +33,7 @@ const ConfigModal: React.FC<Props> = (props) => {
     }
 
     try {
+      setLoading(true);
       const res = await config.api(topologyId, deviceId, values.config);
       if (res.code !== 0) {
         message.error('修改失败', 2);
@@ -44,6 +45,9 @@ const ConfigModal: React.FC<Props> = (props) => {
     }
     catch (err) {
       console.log(err);
+    }
+    finally{
+      setLoading(false)
     }
   };
 
