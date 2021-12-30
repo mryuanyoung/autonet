@@ -2,23 +2,15 @@
     "test": [
     {
         "input": "show ip route",
-        "output": "show ip route\r\nCodes: C - connected, S - static, R - RIP, M - mobile, B - BGP\r\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area \r\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\r\n       E1 - OSPF external type 1, E2 - OSPF external type 2\r\n       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\r\n       ia - IS-IS inter area, * - candidate default, U - per-user static route\r\n       o - ODR, P - periodic downloaded static route\r\n\r\nGateway of last resort is not set\r\n\r\n     2.0.0.0/32 is subnetted, 1 subnets\r\nC       2.2.2.2 is directly connected, Loopback0\r\nC    192.168.10.0/24 is directly connected, Serial0/0/0\r\nC    192.168.20.0/24 is directly connected, Serial0/0/1\r\nC    192.168.2.0/24 is directly connected, FastEthernet0/1\r\nR2#"
+        "output": "1.0.0.0/32 is subnetted, 1 subnets\nO       1.1.1.1 [110/2] via 192.168.30.1, 00:00:12, FastEthernet0/0\n     2.0.0.0/24 is subnetted, 1 subnets\nC       2.2.2.0 is directly connected, Loopback0\n     3.0.0.0/32 is subnetted, 1 subnets\nO       3.3.3.3 [110/782] via 192.168.20.2, 00:00:02, Serial0/0/1\nC    192.168.30.0/24 is directly connected, FastEthernet0/0\nC    192.168.10.0/24 is directly connected, Serial0/0/0\nC    192.168.20.0/24 is directly connected, Serial0/0/1\nC    192.168.2.0/24 is directly connected, FastEthernet0/1"
     },
     {
-        "input": "show ip ospf",
-        "output": "show ip ospf\r\n Routing Process \"ospf 1\" with ID 2.2.2.2\r\n Start time: 00:53:05.804, Time elapsed: 00:14:23.204\r\n Supports only single TOS(TOS0) routes\r\n Supports opaque LSA\r\n Supports Link-local Signaling (LLS)\r\n Supports area transit capability\r\n Router is not originating router-LSAs with maximum metric\r\n Initial SPF schedule delay 5000 msecs\r\n Minimum hold time between two consecutive SPFs 10000 msecs\r\n Maximum wait time between two consecutive SPFs 10000 msecs\r\n Incremental-SPF disabled\r\n Minimum LSA interval 5 secs\r\n Minimum LSA arrival 1000 msecs\r\n LSA group pacing timer 240 secs\r\n Interface flood pacing timer 33 msecs\r\n Retransmission pacing timer 66 msecs\r\n Number of external LSA 0. Checksum Sum 0x000000\r\n Number of opaque AS LSA 0. Checksum Sum 0x000000\r\n Number of DCbitless external and opaque AS LSA 0\r\n Number of DoNotAge external and opaque AS LSA 0\r\n Number of areas in this router is 1. 1 normal 0 stub 0 nssa\r\n Number of areas transit capable is 0\r\n External flood list length 0\r\n IETF NSF helper support enabled\r\n Cisco NSF helper support enabled\r\n    Area BACKBONE(0)\r\n\tNumber of interfaces in this area is 2\r\n\tArea has no authentication\r\n\tSPF algorithm last executed 00:14:07.448 ago\r\n\tSPF algorithm executed 2 times\r\n\tArea ranges are\r\n\tNumber of LSA 3. Checksum Sum 0x011E94\r\n\tNumber of opaque link LSA 0. Checksum Sum 0x000000\r\n\tNumber of DCbitless LSA 0\r\n\tNumber of indication LSA 0\r\n\tNumber of DoNotAge LSA 0\r\n\tFlood list length 0\r\n\r\nR2#"
+        "input": "ping 1.1.1.1",
+        "output": "Success rate is 100 percent (5/5)"
     },
     {
-        "input": "show ip ospf int",
-        "output": "show ip ospf int\r\nSerial0/0/1 is up, line protocol is up \r\n  Internet Address 192.168.20.1/24, Area 0 \r\n  Process ID 1, Router ID 2.2.2.2, Network Type POINT_TO_POINT, Cost: 781\r\n  Transmit Delay is 1 sec, State POINT_TO_POINT\r\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\r\n    oob-resync timeout 40\r\n    Hello due in 00:00:08\r\n  Supports Link-local Signaling (LLS)\r\n  Cisco NSF helper support enabled\r\n  IETF NSF helper support enabled\r\n  Index 2/2, flood queue length 0\r\n  Next 0x0(0)/0x0(0)\r\n  Last flood scan length is 1, maximum is 1\r\n  Last flood scan time is 0 msec, maximum is 0 msec\r\n  Neighbor Count is 1, Adjacent neighbor count is 1 \r\n    Adjacent with neighbor 3.3.3.3\r\n  Suppress hello for 0 neighbor(s)\r\nSerial0/0/0 is up, line protocol is up \r\n  Internet Address 192.168.10.2/24, Area 0 \r\n  Process ID 1, Router ID 2.2.2.2, Network Type POINT_TO_POINT, Cost: 781\r\n  Transmit Delay is 1 sec, State POINT_TO_POINT\r\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\r\n    oob-resync timeout 40\r\n    Hello due in 00:00:04\r\n  Supports Link-local Signaling (LLS)\r\n  Cisco NSF helper support enabled\r\n  IETF NSF helper support enabled\r\n  Index 1/1, flood queue length 0\r\n  Next 0x0(0)/0x0(0)\r\n  Last flood scan length is 1, maximum is 1\r\n  Last flood scan time is 0 msec, maximum is 0 msec\r\n  Neighbor Count is 1, Adjacent neighbor count is 1 \r\n    Adjacent with neighbor 1.1.1.1\r\n  Suppress hello for 0 neighbor(s)\r\nR2#"
-    },
-    {
-        "input": "ping 192.168.10.1",
-        "output": "ping 192.168.10.1\r\n\r\nType escape sequence to abort.\r\nSending 5, 100-byte ICMP Echos to 192.168.10.1, timeout is 2 seconds:\r\n!!!!!\r\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 16/16/16 ms\r\nR2#"
-    },
-    {
-        "input": "ping 192.168.20.2",
-        "output": "ping 192.168.20.2\r\n\r\nType escape sequence to abort.\r\nSending 5, 100-byte ICMP Echos to 192.168.20.2, timeout is 2 seconds:\r\n!!!!!\r\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 16/16/16 ms\r\nR2#"
+        "input": "ping 3.3.3.3",
+        "output": "Success rate is 100 percent (5/5)"
     }
     ]
 }

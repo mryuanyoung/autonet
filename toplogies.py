@@ -132,8 +132,23 @@ defaultMultipleOSPFFile = open(defaultMultipleOSPFFileName, "r")
 defaultMultipleOSPF = Toplogy(conf=json.load(defaultMultipleOSPFFile))
 defaultMultipleOSPFFile.close()
 
+# 空文件（只含接口，配静态路由测试）
+defaultNullFileName = "./example/example.json"
+defaultNullFile = open(defaultNullFileName, "r")
+defaultNull = Toplogy(conf=json.load(defaultNullFile))
+defaultNullFile.close()
+
+# 空文件（port、ospf、static均没配）
+defaultEmptyFileName = "./example/empty.json"
+defaultEmptyFile = open(defaultEmptyFileName, "r")
+defaultEmpty = Toplogy(conf=json.load(defaultEmptyFile))
+defaultEmptyFile.close()
+
+
 # 添加默认拓扑
 toplogies = Toplogies()
 toplogies.addToplogy(defaultStatic)
 toplogies.addToplogy(defaultSingleOSPF)
 toplogies.addToplogy(defaultMultipleOSPF)
+toplogies.addToplogy(defaultNull)
+toplogies.addToplogy(defaultEmpty)

@@ -111,7 +111,7 @@ class Router:
         except:
             realOutput = "执行失败." + self._get_msg_()
             logging.info(realOutput)
-        return {"output": realOutput, "isEqual": realOutput == output}
+        return {"output": realOutput, "isEqual": output in realOutput}
 
 
 
